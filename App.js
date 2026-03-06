@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
   Alert,
+  Image,
   Modal,
   Platform,
   Pressable,
@@ -14,8 +15,10 @@ import {
   View,
 } from 'react-native';
 
+const ANY_FILTER = 'Any';
+
 const CUISINES = [
-  'All',
+  ANY_FILTER,
   'Oaxacan',
   'Bengali',
   'Ethiopian',
@@ -27,12 +30,18 @@ const CUISINES = [
   'Gujarati',
 ];
 
+const DIETARY_OPTIONS = [ANY_FILTER, 'Vegetarian', 'Vegan', 'Gluten-free', 'Seafood'];
+const PRICE_OPTIONS = [ANY_FILTER, '$', '$$', '$$$'];
+const RATING_OPTIONS = ['Any', '4.5+', '4.8+', '5.0'];
+
 const SEED_COOKS = [
   {
     id: 'cook-1',
     name: 'Marisol Ruiz',
     culture: 'Oaxacan',
     location: 'Echo Park',
+    chefImage: 'https://loremflickr.com/1200/900/mexican,food?lock=101',
+    profileImage: 'https://i.pravatar.cc/200?img=32',
     story:
       'Third-generation cook sharing mole recipes from my abuela, now adapted for LA farmers markets.',
     priceRange: '$$',
@@ -43,14 +52,34 @@ const SEED_COOKS = [
     },
     rating: 4.9,
     preOrderHours: 24,
-    dishes: ['Mole negro plate', 'Tlayudas', 'Hoja santa tamales'],
+    dishes: [
+      {
+        name: 'Mole negro plate',
+        image: 'https://loremflickr.com/1200/900/mole,food?lock=111',
+        description: 'Chicken in rich mole with sesame rice.',
+      },
+      {
+        name: 'Tlayudas',
+        image: 'https://loremflickr.com/1200/900/taco,food?lock=112',
+        description: 'Crispy Oaxacan tortilla with beans and quesillo.',
+      },
+      {
+        name: 'Hoja santa tamales',
+        image: 'https://loremflickr.com/1200/900/tamales,food?lock=113',
+        description: 'Steamed tamales wrapped in fragrant hoja santa.',
+      },
+    ],
     tags: ['Family recipe', 'Spice-forward', 'Vegetarian options'],
+    dietary: ['Vegetarian options'],
+    ecoFriendly: true,
   },
   {
     id: 'cook-2',
     name: 'Arif Hasan',
     culture: 'Bengali',
     location: 'Culver City',
+    chefImage: 'https://loremflickr.com/1200/900/curry,food?lock=201',
+    profileImage: 'https://i.pravatar.cc/200?img=15',
     story:
       'Retired engineer cooking coastal Bengali dinners with mustard oils and seasonal seafood.',
     priceRange: '$$',
@@ -61,14 +90,34 @@ const SEED_COOKS = [
     },
     rating: 4.8,
     preOrderHours: 36,
-    dishes: ['Mustard fish curry', 'Khichuri feast', 'Mishti doi'],
+    dishes: [
+      {
+        name: 'Mustard fish curry',
+        image: 'https://loremflickr.com/1200/900/fish,curry,food?lock=211',
+        description: 'Salmon in mustard gravy with steamed rice.',
+      },
+      {
+        name: 'Khichuri feast',
+        image: 'https://loremflickr.com/1200/900/rice,curry,food?lock=212',
+        description: 'Rainy-day lentil rice meal with pickles and sides.',
+      },
+      {
+        name: 'Mishti doi',
+        image: 'https://loremflickr.com/1200/900/dessert,food?lock=213',
+        description: 'Caramelized sweet yogurt served chilled.',
+      },
+    ],
     tags: ['Comforting', 'Seafood', 'Gluten-free'],
+    dietary: ['Gluten-free'],
+    ecoFriendly: false,
   },
   {
     id: 'cook-3',
     name: 'Selam Bekele',
     culture: 'Ethiopian',
     location: 'Koreatown',
+    chefImage: 'https://loremflickr.com/1200/900/ethiopian,food?lock=301',
+    profileImage: 'https://i.pravatar.cc/200?img=48',
     story:
       'Cooking from a shared community kitchen with recipes from Addis family celebrations.',
     priceRange: '$',
@@ -79,14 +128,34 @@ const SEED_COOKS = [
     },
     rating: 4.7,
     preOrderHours: 24,
-    dishes: ['Doro wat platter', 'Vegan injera set', 'Shiro stew'],
+    dishes: [
+      {
+        name: 'Doro wat platter',
+        image: 'https://loremflickr.com/1200/900/stew,food?lock=311',
+        description: 'Slow cooked chicken stew with eggs and injera.',
+      },
+      {
+        name: 'Vegan injera set',
+        image: 'https://loremflickr.com/1200/900/vegan,platter,food?lock=312',
+        description: 'Colorful vegan combos for sharing.',
+      },
+      {
+        name: 'Shiro stew',
+        image: 'https://loremflickr.com/1200/900/chickpea,stew,food?lock=313',
+        description: 'Silky chickpea stew with berbere spices.',
+      },
+    ],
     tags: ['Plant-forward', 'Family style', 'Spicy'],
+    dietary: ['Vegan', 'Vegetarian'],
+    ecoFriendly: true,
   },
   {
     id: 'cook-4',
     name: 'Farah Yazdi',
     culture: 'Persian',
     location: 'Santa Monica',
+    chefImage: 'https://loremflickr.com/1200/900/persian,food?lock=401',
+    profileImage: 'https://i.pravatar.cc/200?img=20',
     story:
       'Modern Persian meal prep with herb-heavy stews and saffron rice.',
     priceRange: '$$$',
@@ -97,8 +166,26 @@ const SEED_COOKS = [
     },
     rating: 5.0,
     preOrderHours: 48,
-    dishes: ['Ghormeh sabzi', 'Zereshk polo', 'Kashk-e bademjan'],
+    dishes: [
+      {
+        name: 'Ghormeh sabzi',
+        image: 'https://loremflickr.com/1200/900/herb,stew,food?lock=411',
+        description: 'Herb stew with kidney beans and dried lime.',
+      },
+      {
+        name: 'Zereshk polo',
+        image: 'https://loremflickr.com/1200/900/rice,plate,food?lock=412',
+        description: 'Saffron rice with barberries and roasted chicken.',
+      },
+      {
+        name: 'Kashk-e bademjan',
+        image: 'https://loremflickr.com/1200/900/eggplant,dip,food?lock=413',
+        description: 'Smoky eggplant dip with mint and whey.',
+      },
+    ],
     tags: ['Meal prep', 'Herbaceous', 'Saffron'],
+    dietary: ['Vegetarian options'],
+    ecoFriendly: true,
   },
 ];
 
@@ -144,16 +231,53 @@ const extractAssistantText = (data) => {
 };
 
 const getDishPrice = (cook, dish) => cook?.dishPrices?.[dish] || '$--';
+const FALLBACK_DISH_IMAGE = 'https://loremflickr.com/1200/900/food?lock=999';
+const FALLBACK_PROFILE_IMAGE = 'https://i.pravatar.cc/200?img=11';
+
+const getMinRatingFromFilter = (ratingFilter) => {
+  if (ratingFilter === '4.5+') return 4.5;
+  if (ratingFilter === '4.8+') return 4.8;
+  if (ratingFilter === '5.0') return 5.0;
+  return 0;
+};
+
+const normalizeDish = (cook, dish) => {
+  if (typeof dish === 'string') {
+    return {
+      name: dish,
+      image: FALLBACK_DISH_IMAGE,
+      description: '',
+      price: getDishPrice(cook, dish),
+    };
+  }
+  const name = dish?.name || 'Signature dish';
+  return {
+    ...dish,
+    name,
+    image: dish?.image || FALLBACK_DISH_IMAGE,
+    description: dish?.description || '',
+    price: dish?.price || getDishPrice(cook, name),
+  };
+};
+
+const getCookDishes = (cook) => (cook?.dishes || []).map((dish) => normalizeDish(cook, dish));
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('discover');
-  const [activeCuisine, setActiveCuisine] = useState('All');
+  const [activeCuisine, setActiveCuisine] = useState(ANY_FILTER);
+  const [activeLocation, setActiveLocation] = useState(ANY_FILTER);
+  const [activeDietary, setActiveDietary] = useState(ANY_FILTER);
+  const [activePrice, setActivePrice] = useState(ANY_FILTER);
+  const [activeRating, setActiveRating] = useState('Any');
+  const [ecoOnly, setEcoOnly] = useState(false);
+  const [activeFilterMenu, setActiveFilterMenu] = useState('');
   const [cooks, setCooks] = useState(SEED_COOKS);
   const [signups, setSignups] = useState(ADMIN_SEED);
   const [orders, setOrders] = useState([]);
   const [requestOpen, setRequestOpen] = useState(false);
   const [selectedCook, setSelectedCook] = useState(null);
   const [selectedDish, setSelectedDish] = useState('');
+  const [selectedChefId, setSelectedChefId] = useState(null);
   const [chatInput, setChatInput] = useState('');
   const [chatMessages, setChatMessages] = useState([
     {
@@ -182,15 +306,34 @@ export default function App() {
     notes: '',
   });
 
+  const locationOptions = useMemo(() => {
+    const uniqueLocations = [...new Set(cooks.map((cook) => cook.location))];
+    return [ANY_FILTER, ...uniqueLocations];
+  }, [cooks]);
+
   const filteredCooks = useMemo(() => {
-    if (activeCuisine === 'All') return cooks;
-    return cooks.filter((cook) => cook.culture === activeCuisine);
-  }, [activeCuisine, cooks]);
+    const minRating = getMinRatingFromFilter(activeRating);
+    return cooks.filter((cook) => {
+      const matchesCuisine = activeCuisine === ANY_FILTER || cook.culture === activeCuisine;
+      const matchesLocation = activeLocation === ANY_FILTER || cook.location === activeLocation;
+      const matchesDietary =
+        activeDietary === ANY_FILTER ||
+        (cook.dietary || []).some((tag) => tag.toLowerCase().includes(activeDietary.toLowerCase()));
+      const matchesPrice = activePrice === ANY_FILTER || cook.priceRange === activePrice;
+      const matchesRating = cook.rating >= minRating;
+      const matchesEco = !ecoOnly || Boolean(cook.ecoFriendly);
+      return matchesCuisine && matchesLocation && matchesDietary && matchesPrice && matchesRating && matchesEco;
+    });
+  }, [activeCuisine, activeLocation, activeDietary, activePrice, activeRating, ecoOnly, cooks]);
 
   const openRequest = (cook, dish) => {
     setSelectedCook(cook);
-    setSelectedDish(dish || cook.dishes[0]);
+    setSelectedDish(dish || getCookDishes(cook)[0]?.name || '');
     setRequestOpen(true);
+  };
+
+  const toggleFilterMenu = (menuKey) => {
+    setActiveFilterMenu((current) => (current === menuKey ? '' : menuKey));
   };
 
   const submitRequest = () => {
@@ -249,6 +392,8 @@ export default function App() {
         name: signup.name,
         culture: signup.culture,
         location: signup.location,
+        chefImage: FALLBACK_DISH_IMAGE,
+        profileImage: FALLBACK_PROFILE_IMAGE,
         story: signup.story || 'New HomeTable cook profile pending full bio.',
         priceRange: '$$',
         rating: 5.0,
@@ -256,6 +401,8 @@ export default function App() {
         dishes: signup.dishes ? signup.dishes.split(',').map((d) => d.trim()) : ['Signature dish'],
         dishPrices: {},
         tags: ['New cook'],
+        dietary: [],
+        ecoFriendly: false,
       },
       ...prev,
     ]);
@@ -264,13 +411,17 @@ export default function App() {
   const cookContext = useMemo(() => {
     return cooks
       .map((cook) => {
-        const dishesWithPrices = cook.dishes
-          .map((dish) => `${dish} (${getDishPrice(cook, dish)})`)
+        const dishesWithPrices = getCookDishes(cook)
+          .map((dish) => `${dish.name} (${dish.price})`)
           .join(', ');
-        return `${cook.name} (${cook.culture}, ${cook.location}) | Dishes: ${dishesWithPrices} | Tags: ${cook.tags.join(', ')} | Preorder: ${cook.preOrderHours}h`;
+        return `${cook.name} (${cook.culture}, ${cook.location}) | Dishes: ${dishesWithPrices} | Tags: ${(cook.tags || []).join(', ')} | Preorder: ${cook.preOrderHours}h`;
       })
       .join('\n');
   }, [cooks]);
+  const selectedChef = useMemo(
+    () => cooks.find((cook) => cook.id === selectedChefId) || null,
+    [cooks, selectedChefId]
+  );
 
   const buildFallbackReply = (message) => {
     const normalized = message.toLowerCase();
@@ -384,57 +535,290 @@ export default function App() {
       <View style={styles.screenContent}>
         {activeTab === 'discover' && (
           <ScrollView contentContainerStyle={styles.content}>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Explore by culture</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
-                {CUISINES.map((cuisine) => (
-                  <Pressable
-                    key={cuisine}
-                    onPress={() => setActiveCuisine(cuisine)}
-                    style={[styles.chip, activeCuisine === cuisine && styles.chipActive]}
-                  >
-                    <Text style={[styles.chipText, activeCuisine === cuisine && styles.chipTextActive]}>{cuisine}</Text>
-                  </Pressable>
-                ))}
-              </ScrollView>
+            <View pointerEvents="none" style={styles.decorWrap}>
+              <View style={styles.decorBlobPrimary} />
+              <View style={styles.decorBlobSecondary} />
             </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Featured home cooks</Text>
-              {filteredCooks.map((cook) => (
-                <View key={cook.id} style={styles.card}>
-                  <View style={styles.cardHeader}>
-                    <View>
-                      <Text style={styles.cardTitle}>{cook.name}</Text>
-                      <Text style={styles.cardMeta}>{cook.culture} • {cook.location}</Text>
+            {!selectedChef && (
+              <>
+                <View style={styles.checkoutHeader}>
+                  <Text style={styles.checkoutEyebrow}>Meal Plans</Text>
+                  <Text style={styles.sectionTitle}>Plan your weekly drop-off</Text>
+                  <Text style={styles.sectionCopy}>
+                    Browse chefs, pick dishes with photos, and request your delivery window.
+                  </Text>
+                  <View style={styles.checkoutStatsRow}>
+                    <View style={styles.checkoutStat}>
+                      <Text style={styles.checkoutStatNumber}>{filteredCooks.length}</Text>
+                      <Text style={styles.checkoutStatLabel}>Chefs available</Text>
                     </View>
-                    <View style={styles.ratingPill}>
-                      <Text style={styles.ratingText}>{cook.rating.toFixed(1)}</Text>
+                    <View style={styles.checkoutStat}>
+                      <Text style={styles.checkoutStatNumber}>24h+</Text>
+                      <Text style={styles.checkoutStatLabel}>Preorder notice</Text>
                     </View>
-                  </View>
-                  <Text style={styles.cardStory}>{cook.story}</Text>
-                  <View style={styles.tagRow}>
-                    {cook.tags.map((tag) => (
-                      <Text key={tag} style={styles.tag}>{tag}</Text>
-                    ))}
-                  </View>
-                  <Text style={styles.dishLabel}>Popular dishes</Text>
-                  {cook.dishes.map((dish) => (
-                    <Pressable key={dish} onPress={() => openRequest(cook, dish)} style={styles.dishRow}>
-                      <Text style={styles.dishName}>{dish}</Text>
-                      <View style={styles.dishMeta}>
-                        <Text style={styles.dishPrice}>{getDishPrice(cook, dish)}</Text>
-                        <Text style={styles.dishAction}>Request</Text>
-                      </View>
-                    </Pressable>
-                  ))}
-                  <View style={styles.cardFooter}>
-                    <Text style={styles.preorder}>Preorder {cook.preOrderHours}h notice</Text>
-                    <Text style={styles.price}>{cook.priceRange}</Text>
                   </View>
                 </View>
-              ))}
-            </View>
+
+                <View style={styles.section}>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterBarRow}>
+                    <Pressable
+                      style={[styles.filterBarButton, activeFilterMenu === 'location' && styles.filterBarButtonActive]}
+                      onPress={() => toggleFilterMenu('location')}
+                    >
+                      <View style={styles.filterBarInner}>
+                        <Text style={[styles.filterBarLabelSingle, activeFilterMenu === 'location' && styles.filterBarLabelSingleActive]}>
+                          Location
+                        </Text>
+                        <Ionicons name="chevron-down" size={14} color={activeFilterMenu === 'location' ? '#FFFDF8' : '#102A43'} />
+                      </View>
+                    </Pressable>
+                    <Pressable
+                      style={[styles.filterBarButton, activeFilterMenu === 'dietary' && styles.filterBarButtonActive]}
+                      onPress={() => toggleFilterMenu('dietary')}
+                    >
+                      <View style={styles.filterBarInner}>
+                        <Text style={[styles.filterBarLabelSingle, activeFilterMenu === 'dietary' && styles.filterBarLabelSingleActive]}>
+                          Dietary
+                        </Text>
+                        <Ionicons name="chevron-down" size={14} color={activeFilterMenu === 'dietary' ? '#FFFDF8' : '#102A43'} />
+                      </View>
+                    </Pressable>
+                    <Pressable
+                      style={[styles.filterBarButton, activeFilterMenu === 'culture' && styles.filterBarButtonActive]}
+                      onPress={() => toggleFilterMenu('culture')}
+                    >
+                      <View style={styles.filterBarInner}>
+                        <Text style={[styles.filterBarLabelSingle, activeFilterMenu === 'culture' && styles.filterBarLabelSingleActive]}>
+                          Culture
+                        </Text>
+                        <Ionicons name="chevron-down" size={14} color={activeFilterMenu === 'culture' ? '#FFFDF8' : '#102A43'} />
+                      </View>
+                    </Pressable>
+                    <Pressable
+                      style={[styles.filterBarButton, activeFilterMenu === 'price' && styles.filterBarButtonActive]}
+                      onPress={() => toggleFilterMenu('price')}
+                    >
+                      <View style={styles.filterBarInner}>
+                        <Text style={[styles.filterBarLabelSingle, activeFilterMenu === 'price' && styles.filterBarLabelSingleActive]}>
+                          Price
+                        </Text>
+                        <Ionicons name="chevron-down" size={14} color={activeFilterMenu === 'price' ? '#FFFDF8' : '#102A43'} />
+                      </View>
+                    </Pressable>
+                    <Pressable
+                      style={[styles.filterBarButton, activeFilterMenu === 'more' && styles.filterBarButtonActive]}
+                      onPress={() => toggleFilterMenu('more')}
+                    >
+                      <View style={styles.filterBarInner}>
+                        <Text style={[styles.filterBarLabelSingle, activeFilterMenu === 'more' && styles.filterBarLabelSingleActive]}>
+                          More
+                        </Text>
+                        <Ionicons name="chevron-down" size={14} color={activeFilterMenu === 'more' ? '#FFFDF8' : '#102A43'} />
+                      </View>
+                    </Pressable>
+                  </ScrollView>
+
+                  {activeFilterMenu === 'location' && (
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
+                      {locationOptions.map((location) => (
+                        <Pressable
+                          key={location}
+                          onPress={() => setActiveLocation(location)}
+                          style={[styles.chip, activeLocation === location && styles.chipActive]}
+                        >
+                          <Text style={[styles.chipText, activeLocation === location && styles.chipTextActive]}>{location}</Text>
+                        </Pressable>
+                      ))}
+                    </ScrollView>
+                  )}
+
+                  {activeFilterMenu === 'dietary' && (
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
+                      {DIETARY_OPTIONS.map((dietary) => (
+                        <Pressable
+                          key={dietary}
+                          onPress={() => setActiveDietary(dietary)}
+                          style={[styles.chip, activeDietary === dietary && styles.chipActive]}
+                        >
+                          <Text style={[styles.chipText, activeDietary === dietary && styles.chipTextActive]}>{dietary}</Text>
+                        </Pressable>
+                      ))}
+                    </ScrollView>
+                  )}
+
+                  {activeFilterMenu === 'culture' && (
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
+                      {CUISINES.map((cuisine) => (
+                        <Pressable
+                          key={cuisine}
+                          onPress={() => setActiveCuisine(cuisine)}
+                          style={[styles.chip, activeCuisine === cuisine && styles.chipActive]}
+                        >
+                          <Text style={[styles.chipText, activeCuisine === cuisine && styles.chipTextActive]}>{cuisine}</Text>
+                        </Pressable>
+                      ))}
+                    </ScrollView>
+                  )}
+
+                  {activeFilterMenu === 'price' && (
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
+                      {PRICE_OPTIONS.map((price) => (
+                        <Pressable
+                          key={price}
+                          onPress={() => setActivePrice(price)}
+                          style={[styles.chip, activePrice === price && styles.chipActive]}
+                        >
+                          <Text style={[styles.chipText, activePrice === price && styles.chipTextActive]}>{price}</Text>
+                        </Pressable>
+                      ))}
+                    </ScrollView>
+                  )}
+
+                  {activeFilterMenu === 'more' && (
+                    <View style={styles.moreFilterRow}>
+                      {RATING_OPTIONS.map((ratingOption) => (
+                        <Pressable
+                          key={ratingOption}
+                          onPress={() => setActiveRating(ratingOption)}
+                          style={[styles.smallChip, activeRating === ratingOption && styles.smallChipActive]}
+                        >
+                          <Text style={[styles.smallChipText, activeRating === ratingOption && styles.smallChipTextActive]}>
+                            {ratingOption}
+                          </Text>
+                        </Pressable>
+                      ))}
+                      <Pressable
+                        onPress={() => setEcoOnly((current) => !current)}
+                        style={[styles.smallChip, ecoOnly && styles.smallChipActive]}
+                      >
+                        <Text style={[styles.smallChipText, ecoOnly && styles.smallChipTextActive]}>Eco-friendly only</Text>
+                      </Pressable>
+                    </View>
+                  )}
+                </View>
+
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Featured home cooks</Text>
+                  {filteredCooks.length === 0 && (
+                    <View style={styles.emptyStateCard}>
+                      <Text style={styles.emptyStateTitle}>No chefs match those filters yet</Text>
+                      <Text style={styles.emptyStateCopy}>Try opening another filter and broadening your selection.</Text>
+                    </View>
+                  )}
+                  {filteredCooks.map((cook) => {
+                    const dishes = getCookDishes(cook);
+                    return (
+                      <View key={cook.id} style={styles.card}>
+                        <View style={styles.heroImageWrap}>
+                          <SmartImage uri={cook.chefImage} fallbackUri={FALLBACK_DISH_IMAGE} style={styles.cardHeroImage} />
+                          <View style={styles.heroOverlay} />
+                          <View style={styles.heroBadge}>
+                            <Text style={styles.heroBadgeText}>{cook.culture}</Text>
+                          </View>
+                          <View style={styles.profileBubble}>
+                            <SmartImage
+                              uri={cook.profileImage}
+                              fallbackUri={FALLBACK_PROFILE_IMAGE}
+                              style={styles.profileBubbleImage}
+                            />
+                          </View>
+                        </View>
+                        <View style={styles.cardHeader}>
+                          <View>
+                            <Text style={styles.cardTitle}>{cook.name}</Text>
+                            <Text style={styles.cardMeta}>{cook.culture} • {cook.location}</Text>
+                          </View>
+                          <View style={styles.ratingPill}>
+                            <Text style={styles.ratingText}>{cook.rating.toFixed(1)}</Text>
+                          </View>
+                        </View>
+                        <Text style={styles.cardStory}>{cook.story}</Text>
+                        <View style={styles.tagRow}>
+                          {(cook.tags || []).map((tag) => (
+                            <Text key={tag} style={styles.tag}>{tag}</Text>
+                          ))}
+                        </View>
+                        <Text style={styles.dishLabel}>Popular dishes</Text>
+                        {dishes.map((dish) => (
+                          <Pressable key={dish.name} onPress={() => openRequest(cook, dish.name)} style={styles.dishRow}>
+                            <View style={styles.dishIdentity}>
+                              <SmartImage uri={dish.image} fallbackUri={FALLBACK_DISH_IMAGE} style={styles.dishThumb} />
+                              <View>
+                                <Text style={styles.dishName}>{dish.name}</Text>
+                                {!!dish.description && <Text style={styles.dishDescription}>{dish.description}</Text>}
+                              </View>
+                            </View>
+                            <View style={styles.dishMeta}>
+                              <Text style={styles.dishPrice}>{dish.price}</Text>
+                              <Text style={styles.dishAction}>Request</Text>
+                            </View>
+                          </Pressable>
+                        ))}
+                        <View style={styles.cardFooter}>
+                          <Text style={styles.preorder}>Preorder {cook.preOrderHours}h notice</Text>
+                          <Text style={styles.price}>{cook.priceRange}</Text>
+                        </View>
+                        <Pressable style={styles.profileButton} onPress={() => setSelectedChefId(cook.id)}>
+                          <Text style={styles.profileButtonText}>View chef profile</Text>
+                        </Pressable>
+                      </View>
+                    );
+                  })}
+                </View>
+              </>
+            )}
+
+            {selectedChef && (
+              <View style={styles.section}>
+                <Pressable onPress={() => setSelectedChefId(null)} style={styles.backButton}>
+                  <Ionicons name="chevron-back" size={18} color="#102A43" />
+                  <Text style={styles.backButtonText}>Back to all chefs</Text>
+                </Pressable>
+
+                <View style={styles.profileCard}>
+                  <View style={styles.heroImageWrap}>
+                    <SmartImage uri={selectedChef.chefImage} fallbackUri={FALLBACK_DISH_IMAGE} style={styles.profileHeroImage} />
+                    <View style={styles.heroOverlay} />
+                    <View style={styles.heroBadge}>
+                      <Text style={styles.heroBadgeText}>{selectedChef.culture}</Text>
+                    </View>
+                    <View style={styles.profileBubbleLarge}>
+                      <SmartImage
+                        uri={selectedChef.profileImage}
+                        fallbackUri={FALLBACK_PROFILE_IMAGE}
+                        style={styles.profileBubbleLargeImage}
+                      />
+                    </View>
+                  </View>
+                  <View style={styles.cardHeader}>
+                    <View>
+                      <Text style={styles.cardTitle}>{selectedChef.name}</Text>
+                      <Text style={styles.cardMeta}>{selectedChef.culture} • {selectedChef.location}</Text>
+                    </View>
+                    <View style={styles.ratingPill}>
+                      <Text style={styles.ratingText}>{selectedChef.rating.toFixed(1)}</Text>
+                    </View>
+                  </View>
+                  <Text style={styles.cardStory}>{selectedChef.story}</Text>
+                  <Text style={styles.profileSectionTitle}>Menu photos</Text>
+                  {getCookDishes(selectedChef).map((dish) => (
+                    <View key={dish.name} style={styles.profileDishCard}>
+                      <SmartImage uri={dish.image} fallbackUri={FALLBACK_DISH_IMAGE} style={styles.profileDishImage} />
+                      <View style={styles.profileDishContent}>
+                        <Text style={styles.dishName}>{dish.name}</Text>
+                        {!!dish.description && <Text style={styles.dishDescription}>{dish.description}</Text>}
+                        <View style={styles.profileDishFooter}>
+                          <Text style={styles.dishPrice}>{dish.price}</Text>
+                          <Pressable onPress={() => openRequest(selectedChef, dish.name)}>
+                            <Text style={styles.dishAction}>Request this</Text>
+                          </Pressable>
+                        </View>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
           </ScrollView>
         )}
 
@@ -551,13 +935,15 @@ export default function App() {
             </Text>
             <Text style={styles.modalLabel}>Select dish</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.dishPicker}>
-              {selectedCook?.dishes.map((dish) => (
+              {getCookDishes(selectedCook).map((dish) => (
                 <Pressable
-                  key={dish}
-                  onPress={() => setSelectedDish(dish)}
-                  style={[styles.dishChip, selectedDish === dish && styles.dishChipActive]}
+                  key={dish.name}
+                  onPress={() => setSelectedDish(dish.name)}
+                  style={[styles.dishChip, selectedDish === dish.name && styles.dishChipActive]}
                 >
-                  <Text style={[styles.dishChipText, selectedDish === dish && styles.dishChipTextActive]}>{dish}</Text>
+                  <Text style={[styles.dishChipText, selectedDish === dish.name && styles.dishChipTextActive]}>
+                    {dish.name}
+                  </Text>
                 </Pressable>
               ))}
             </ScrollView>
@@ -614,10 +1000,10 @@ export default function App() {
             />
 
             <View style={styles.modalActions}>
-              <Pressable onPress={() => setRequestOpen(false)} style={styles.secondaryButton}>
+              <Pressable onPress={() => setRequestOpen(false)} style={styles.modalSecondaryButton}>
                 <Text style={styles.secondaryButtonText}>Cancel</Text>
               </Pressable>
-              <Pressable onPress={submitRequest} style={styles.primaryButton}>
+              <Pressable onPress={submitRequest} style={styles.modalPrimaryButton}>
                 <Text style={styles.primaryButtonText}>Send request</Text>
               </Pressable>
             </View>
@@ -632,9 +1018,33 @@ function TabButton({ label, icon, iconActive, active, onPress }) {
   const iconName = active ? iconActive : icon;
   return (
     <Pressable onPress={onPress} style={[styles.tabButton, active && styles.tabButtonActive]}>
-      <Ionicons name={iconName} size={20} color={active ? '#3A2E24' : '#8A7462'} />
+      <Ionicons name={iconName} size={20} color={active ? '#102A43' : '#7A5A60'} />
       <Text style={[styles.tabButtonText, active && styles.tabButtonTextActive]}>{label}</Text>
     </Pressable>
+  );
+}
+
+function SmartImage({ uri, fallbackUri, style }) {
+  const [currentUri, setCurrentUri] = useState(uri || fallbackUri || '');
+
+  useEffect(() => {
+    setCurrentUri(uri || fallbackUri || '');
+  }, [uri, fallbackUri]);
+
+  const source = currentUri ? { uri: currentUri } : require('./assets/icon.png');
+
+  return (
+    <Image
+      source={source}
+      style={style}
+      onError={() => {
+        if (fallbackUri && currentUri !== fallbackUri) {
+          setCurrentUri(fallbackUri);
+          return;
+        }
+        setCurrentUri('');
+      }}
+    />
   );
 }
 
@@ -668,22 +1078,25 @@ const serifFont = Platform.select({ ios: 'Georgia', android: 'serif', default: '
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F7F0E8',
+    backgroundColor: '#FFF7F0',
   },
   header: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 22,
     paddingTop: 12,
-    paddingBottom: 10,
+    paddingBottom: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3E3D3',
+    backgroundColor: '#FFFDF8',
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontFamily: serifFont,
-    color: '#3A2E24',
-    letterSpacing: 0.8,
+    color: '#1F2A44',
+    letterSpacing: 1,
   },
   subtitle: {
-    fontSize: 14,
-    color: '#6E5A4A',
+    fontSize: 13,
+    color: '#8B6C5A',
     marginTop: 4,
   },
   screenContent: {
@@ -692,10 +1105,10 @@ const styles = StyleSheet.create({
   bottomNav: {
     flexDirection: 'row',
     paddingHorizontal: 14,
-    paddingVertical: 10,
-    backgroundColor: '#FFF8F1',
+    paddingVertical: 12,
+    backgroundColor: '#FFFDF8',
     borderTopWidth: 1,
-    borderTopColor: '#E7D6C7',
+    borderTopColor: '#F3E3D3',
   },
   tabButton: {
     flex: 1,
@@ -707,66 +1120,261 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   tabButtonActive: {
-    backgroundColor: '#EFE3D8',
+    backgroundColor: '#FFEAD9',
   },
   tabButtonText: {
-    color: '#8A7462',
+    color: '#8B6C5A',
     fontSize: 11,
     fontWeight: '600',
   },
   tabButtonTextActive: {
-    color: '#3A2E24',
+    color: '#1F2A44',
   },
   content: {
     padding: 20,
     paddingBottom: 0,
   },
+  decorWrap: {
+    position: 'absolute',
+    top: -40,
+    left: 0,
+    right: 0,
+    height: 220,
+    zIndex: -1,
+  },
+  decorBlobPrimary: {
+    position: 'absolute',
+    right: -35,
+    top: 0,
+    width: 170,
+    height: 170,
+    borderRadius: 85,
+    backgroundColor: '#FFE1BF',
+    opacity: 0.55,
+  },
+  decorBlobSecondary: {
+    position: 'absolute',
+    left: -50,
+    top: 26,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    backgroundColor: '#FFD3CE',
+    opacity: 0.4,
+  },
   section: {
     marginBottom: 24,
+  },
+  checkoutHeader: {
+    backgroundColor: '#FFFDF8',
+    borderRadius: 20,
+    padding: 18,
+    borderWidth: 1,
+    borderColor: '#F3E3D3',
+    marginBottom: 22,
+    shadowColor: '#3A2613',
+    shadowOpacity: 0.09,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3,
+  },
+  checkoutEyebrow: {
+    textTransform: 'uppercase',
+    letterSpacing: 1.1,
+    fontSize: 11,
+    color: '#D16634',
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  checkoutStatsRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 10,
+  },
+  checkoutStat: {
+    flex: 1,
+    backgroundColor: '#FFF2E7',
+    borderRadius: 12,
+    padding: 12,
+  },
+  checkoutStatNumber: {
+    fontSize: 20,
+    color: '#1F2A44',
+    fontWeight: '700',
+  },
+  checkoutStatLabel: {
+    color: '#8B6C5A',
+    fontSize: 12,
+    marginTop: 2,
   },
   sectionTitle: {
     fontSize: 20,
     fontFamily: serifFont,
-    color: '#3A2E24',
+    color: '#1F2A44',
   },
   sectionCopy: {
-    color: '#6E5A4A',
+    color: '#8B6C5A',
     marginTop: 8,
     marginBottom: 12,
   },
+  filterBarRow: {
+    paddingVertical: 6,
+    paddingRight: 10,
+  },
+  filterBarButton: {
+    backgroundColor: '#FFFDF8',
+    borderWidth: 1,
+    borderColor: '#EDD9C6',
+    borderRadius: 18,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    marginRight: 10,
+    shadowColor: '#3A2613',
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+  },
+  filterBarButtonActive: {
+    backgroundColor: '#1F2A44',
+    borderColor: '#1F2A44',
+  },
+  filterBarInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  filterBarLabelSingle: {
+    color: '#1F2A44',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  filterBarLabelSingleActive: {
+    color: '#FFFDF8',
+  },
   chipRow: {
     paddingVertical: 12,
+    paddingHorizontal: 2,
   },
   chip: {
     paddingVertical: 8,
     paddingHorizontal: 14,
-    backgroundColor: '#EFE3D8',
+    backgroundColor: '#FAE6DA',
     borderRadius: 20,
     marginRight: 10,
   },
   chipActive: {
-    backgroundColor: '#D57A4E',
+    backgroundColor: '#D16634',
   },
   chipText: {
-    color: '#6E5A4A',
+    color: '#8B6C5A',
     fontSize: 13,
   },
   chipTextActive: {
-    color: '#FFF6EE',
+    color: '#FFFDFC',
+    fontWeight: '600',
+  },
+  moreFilterRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 12,
+  },
+  smallChip: {
+    paddingVertical: 7,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    backgroundColor: '#FAE6DA',
+  },
+  smallChipActive: {
+    backgroundColor: '#1F2A44',
+  },
+  smallChipText: {
+    color: '#8B6C5A',
+    fontSize: 12,
+  },
+  smallChipTextActive: {
+    color: '#FFFDFC',
     fontWeight: '600',
   },
   card: {
-    backgroundColor: '#FFF8F1',
-    borderRadius: 18,
-    padding: 16,
-    marginBottom: 16,
+    backgroundColor: '#FFFDF8',
+    borderRadius: 20,
+    padding: 14,
+    marginBottom: 18,
     borderWidth: 1,
-    borderColor: '#E7D6C7',
-    shadowColor: '#2E2218',
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 2,
+    borderColor: '#F2DEC9',
+    shadowColor: '#3A2613',
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 5,
+    overflow: 'hidden',
+  },
+  cardHeroImage: {
+    width: '100%',
+    height: 176,
+    borderRadius: 14,
+    marginBottom: 0,
+  },
+  heroImageWrap: {
+    position: 'relative',
+    marginBottom: 12,
+  },
+  heroOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(21, 16, 12, 0.18)',
+    borderRadius: 14,
+  },
+  heroBadge: {
+    position: 'absolute',
+    left: 10,
+    bottom: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 253, 248, 0.9)',
+  },
+  heroBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#1F2A44',
+    textTransform: 'uppercase',
+    letterSpacing: 0.7,
+  },
+  profileBubble: {
+    position: 'absolute',
+    right: 12,
+    bottom: 10,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 2,
+    borderColor: '#FFFDF8',
+    overflow: 'hidden',
+    shadowColor: '#3A2613',
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
+  },
+  profileBubbleImage: {
+    width: '100%',
+    height: '100%',
+  },
+  profileBubbleLarge: {
+    position: 'absolute',
+    right: 14,
+    bottom: 12,
+    width: 78,
+    height: 78,
+    borderRadius: 39,
+    borderWidth: 3,
+    borderColor: '#FFFDFC',
+    overflow: 'hidden',
+  },
+  profileBubbleLargeImage: {
+    width: '100%',
+    height: '100%',
   },
   cardHeader: {
     flexDirection: 'row',
@@ -776,25 +1384,25 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 18,
     fontFamily: serifFont,
-    color: '#3A2E24',
+    color: '#1F2A44',
   },
   cardMeta: {
-    color: '#6E5A4A',
+    color: '#8B6C5A',
     fontSize: 12,
     marginTop: 2,
   },
   ratingPill: {
-    backgroundColor: '#4E7C59',
+    backgroundColor: '#2E8A68',
     borderRadius: 12,
     paddingHorizontal: 10,
     paddingVertical: 4,
   },
   ratingText: {
-    color: '#F7F0E8',
+    color: '#FFFDF8',
     fontWeight: '600',
   },
   cardStory: {
-    color: '#4A3B2F',
+    color: '#755D50',
     marginTop: 12,
     lineHeight: 20,
   },
@@ -804,8 +1412,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   tag: {
-    backgroundColor: '#EFE3D8',
-    color: '#6E5A4A',
+    backgroundColor: '#F6E7DC',
+    color: '#755D50',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 14,
@@ -815,32 +1423,51 @@ const styles = StyleSheet.create({
   },
   dishLabel: {
     marginTop: 10,
-    color: '#6E5A4A',
+    color: '#8B6C5A',
     fontSize: 12,
   },
   dishRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#EFE3D8',
+    borderBottomColor: '#F4E3D4',
   },
-  dishMeta: {
+  dishIdentity: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    flex: 1,
+    marginRight: 10,
+  },
+  dishThumb: {
+    width: 52,
+    height: 52,
+    borderRadius: 12,
+    marginRight: 10,
+  },
+  dishMeta: {
+    alignItems: 'flex-end',
+    gap: 4,
   },
   dishPrice: {
-    color: '#4A3B2F',
+    color: '#755D50',
     fontWeight: '600',
   },
   dishName: {
-    color: '#3A2E24',
+    color: '#1F2A44',
+    fontWeight: '600',
+  },
+  dishDescription: {
+    color: '#8B6C5A',
+    fontSize: 12,
+    marginTop: 2,
+    maxWidth: 180,
   },
   dishAction: {
-    color: '#D57A4E',
+    color: '#C9572F',
     fontWeight: '600',
+    fontSize: 12,
   },
   cardFooter: {
     flexDirection: 'row',
@@ -848,85 +1475,150 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   preorder: {
-    color: '#6E5A4A',
+    color: '#8B6C5A',
     fontSize: 12,
   },
   price: {
-    color: '#3A2E24',
+    color: '#1F2A44',
     fontWeight: '600',
+  },
+  profileButton: {
+    marginTop: 12,
+    backgroundColor: '#1F2A44',
+    paddingVertical: 11,
+    borderRadius: 14,
+    alignItems: 'center',
+  },
+  profileButtonText: {
+    color: '#FFFDFC',
+    fontWeight: '600',
+    fontSize: 13,
+  },
+  backButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    marginBottom: 12,
+  },
+  backButtonText: {
+    color: '#102A43',
+    fontWeight: '600',
+    marginLeft: 4,
+  },
+  profileCard: {
+    backgroundColor: '#FFFDF8',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#F2DEC9',
+    padding: 14,
+    overflow: 'hidden',
+  },
+  profileHeroImage: {
+    width: '100%',
+    height: 224,
+    borderRadius: 14,
+    marginBottom: 0,
+  },
+  profileSectionTitle: {
+    color: '#102A43',
+    fontFamily: serifFont,
+    fontSize: 18,
+    marginTop: 14,
+    marginBottom: 10,
+  },
+  profileDishCard: {
+    borderWidth: 1,
+    borderColor: '#F2DEC9',
+    borderRadius: 14,
+    marginBottom: 12,
+    overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
+  },
+  profileDishImage: {
+    width: '100%',
+    height: 160,
+  },
+  profileDishContent: {
+    padding: 12,
+  },
+  profileDishFooter: {
+    marginTop: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   field: {
     marginBottom: 12,
   },
   fieldLabel: {
-    color: '#6E5A4A',
+    color: '#7A5A60',
     marginBottom: 6,
     fontSize: 12,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   input: {
-    backgroundColor: '#FFF8F1',
+    backgroundColor: '#FFFDF8',
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: '#E7D6C7',
-    color: '#3A2E24',
+    borderColor: '#F2DEC9',
+    color: '#1F2A44',
   },
   inputMultiline: {
     minHeight: 90,
     textAlignVertical: 'top',
   },
   primaryButton: {
-    backgroundColor: '#D57A4E',
+    backgroundColor: '#C9572F',
     paddingVertical: 12,
     borderRadius: 14,
     alignItems: 'center',
     marginTop: 8,
   },
   primaryButtonText: {
-    color: '#FFF6EE',
+    color: '#FFFDFC',
     fontWeight: '600',
   },
   subhead: {
     fontSize: 16,
     marginTop: 16,
-    color: '#3A2E24',
+    color: '#102A43',
     fontFamily: serifFont,
   },
   adminCard: {
-    backgroundColor: '#FFF8F1',
+    backgroundColor: '#FFFDFC',
     borderRadius: 16,
     padding: 14,
     marginTop: 10,
     borderWidth: 1,
-    borderColor: '#E7D6C7',
+    borderColor: '#F1D9D8',
   },
   adminName: {
     fontSize: 16,
-    color: '#3A2E24',
+    color: '#102A43',
   },
   adminMeta: {
-    color: '#6E5A4A',
+    color: '#7A5A60',
     marginTop: 4,
   },
   adminStory: {
-    color: '#6E5A4A',
+    color: '#7A5A60',
     marginTop: 6,
   },
   emptyText: {
-    color: '#9B8573',
+    color: '#A07980',
     marginTop: 8,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(24, 18, 12, 0.4)',
+    backgroundColor: 'rgba(24, 18, 12, 0.45)',
     justifyContent: 'center',
     padding: 20,
   },
   modalCard: {
-    backgroundColor: '#FFF8F1',
+    backgroundColor: '#FFFDF8',
     borderRadius: 20,
     padding: 20,
     maxHeight: '90%',
@@ -934,15 +1626,15 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontFamily: serifFont,
-    color: '#3A2E24',
+    color: '#1F2A44',
   },
   modalSubtitle: {
-    color: '#6E5A4A',
+    color: '#8B6C5A',
     marginTop: 4,
   },
   modalLabel: {
     marginTop: 12,
-    color: '#6E5A4A',
+    color: '#8B6C5A',
     fontSize: 12,
     textTransform: 'uppercase',
     letterSpacing: 1,
@@ -951,36 +1643,54 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   dishChip: {
-    backgroundColor: '#EFE3D8',
+    backgroundColor: '#F6E7DC',
     borderRadius: 18,
     paddingHorizontal: 12,
     paddingVertical: 6,
     marginRight: 8,
   },
   dishChipActive: {
-    backgroundColor: '#3A2E24',
+    backgroundColor: '#1F2A44',
   },
   dishChipText: {
-    color: '#6E5A4A',
+    color: '#8B6C5A',
     fontSize: 12,
   },
   dishChipTextActive: {
-    color: '#FFF6EE',
+    color: '#FFFDF8',
   },
   modalActions: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: 10,
     marginTop: 10,
+  },
+  modalPrimaryButton: {
+    flex: 1,
+    backgroundColor: '#C9572F',
+    borderRadius: 14,
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalSecondaryButton: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#C9572F',
+    borderRadius: 14,
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFDF8',
   },
   secondaryButton: {
     borderWidth: 1,
-    borderColor: '#D57A4E',
+    borderColor: '#D8453D',
     borderRadius: 14,
     paddingVertical: 10,
     paddingHorizontal: 18,
   },
   secondaryButtonText: {
-    color: '#D57A4E',
+    color: '#C9572F',
     fontWeight: '600',
   },
   row: {
@@ -1009,23 +1719,23 @@ const styles = StyleSheet.create({
   },
   chatBubbleAssistant: {
     alignSelf: 'flex-start',
-    backgroundColor: '#FFF8F1',
+    backgroundColor: '#FFFDF8',
     borderWidth: 1,
-    borderColor: '#E7D6C7',
+    borderColor: '#F2DEC9',
   },
   chatBubbleUser: {
     alignSelf: 'flex-end',
-    backgroundColor: '#3A2E24',
+    backgroundColor: '#1F2A44',
   },
   chatText: {
     fontSize: 14,
     lineHeight: 20,
   },
   chatTextAssistant: {
-    color: '#3A2E24',
+    color: '#1F2A44',
   },
   chatTextUser: {
-    color: '#FFF6EE',
+    color: '#FFFDFC',
   },
   chatInputRow: {
     flexDirection: 'row',
@@ -1035,16 +1745,16 @@ const styles = StyleSheet.create({
   },
   chatInput: {
     flex: 1,
-    backgroundColor: '#FFF8F1',
+    backgroundColor: '#FFFDF8',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E7D6C7',
-    color: '#3A2E24',
+    borderColor: '#F2DEC9',
+    color: '#1F2A44',
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
   chatSendButton: {
-    backgroundColor: '#D57A4E',
+    backgroundColor: '#C9572F',
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 10,
@@ -1053,7 +1763,27 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   chatSendText: {
-    color: '#FFF6EE',
+    color: '#FFFDF8',
     fontWeight: '600',
+  },
+  emptyStateCard: {
+    backgroundColor: '#FFFDF8',
+    borderWidth: 1,
+    borderColor: '#F2DEC9',
+    borderStyle: 'dashed',
+    borderRadius: 16,
+    padding: 16,
+    marginTop: 12,
+    marginBottom: 14,
+  },
+  emptyStateTitle: {
+    color: '#1F2A44',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  emptyStateCopy: {
+    color: '#8B6C5A',
+    marginTop: 6,
+    lineHeight: 20,
   },
 });
