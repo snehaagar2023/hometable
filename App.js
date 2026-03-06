@@ -13,59 +13,49 @@ import {
   Text,
   TextInput,
   View,
+  Dimensions,
 } from 'react-native';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const ANY_FILTER = 'Any';
 
 const CUISINES = [
-  ANY_FILTER,
-  'Oaxacan',
-  'Bengali',
-  'Ethiopian',
-  'Persian',
-  'Filipino',
-  'Lebanese',
-  'Korean',
-  'Nigerian',
-  'Gujarati',
+  ANY_FILTER, 'Oaxacan', 'Bengali', 'Ethiopian',
+  'Persian', 'Filipino', 'Lebanese', 'Korean', 'Nigerian', 'Gujarati',
 ];
-
 const DIETARY_OPTIONS = [ANY_FILTER, 'Vegetarian', 'Vegan', 'Gluten-free', 'Seafood'];
 const PRICE_OPTIONS = [ANY_FILTER, '$', '$$', '$$$'];
 const RATING_OPTIONS = ['Any', '4.5+', '4.8+', '5.0'];
 
+// Real Unsplash food images
 const SEED_COOKS = [
   {
     id: 'cook-1',
     name: 'Marisol Ruiz',
     culture: 'Oaxacan',
     location: 'Echo Park',
-    chefImage: 'https://loremflickr.com/1200/900/mexican,food?lock=101',
+    chefImage: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80',
     profileImage: 'https://i.pravatar.cc/200?img=32',
-    story:
-      'Third-generation cook sharing mole recipes from my abuela, now adapted for LA farmers markets.',
+    story: 'Third-generation cook sharing mole recipes from my abuela, now adapted for LA farmers markets.',
     priceRange: '$$',
-    dishPrices: {
-      'Mole negro plate': '$18',
-      Tlayudas: '$14',
-      'Hoja santa tamales': '$16',
-    },
+    dishPrices: { 'Mole negro plate': '$18', 'Tlayudas': '$14', 'Hoja santa tamales': '$16' },
     rating: 4.9,
     preOrderHours: 24,
     dishes: [
       {
         name: 'Mole negro plate',
-        image: 'https://loremflickr.com/1200/900/mole,food?lock=111',
+        image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600&q=80',
         description: 'Chicken in rich mole with sesame rice.',
       },
       {
         name: 'Tlayudas',
-        image: 'https://loremflickr.com/1200/900/taco,food?lock=112',
+        image: 'https://images.unsplash.com/photo-1570461226513-e08b58a52c53?w=600&q=80',
         description: 'Crispy Oaxacan tortilla with beans and quesillo.',
       },
       {
         name: 'Hoja santa tamales',
-        image: 'https://loremflickr.com/1200/900/tamales,food?lock=113',
+        image: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=600&q=80',
         description: 'Steamed tamales wrapped in fragrant hoja santa.',
       },
     ],
@@ -78,32 +68,27 @@ const SEED_COOKS = [
     name: 'Arif Hasan',
     culture: 'Bengali',
     location: 'Culver City',
-    chefImage: 'https://loremflickr.com/1200/900/curry,food?lock=201',
+    chefImage: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=800&q=80',
     profileImage: 'https://i.pravatar.cc/200?img=15',
-    story:
-      'Retired engineer cooking coastal Bengali dinners with mustard oils and seasonal seafood.',
+    story: 'Retired engineer cooking coastal Bengali dinners with mustard oils and seasonal seafood.',
     priceRange: '$$',
-    dishPrices: {
-      'Mustard fish curry': '$19',
-      'Khichuri feast': '$15',
-      'Mishti doi': '$8',
-    },
+    dishPrices: { 'Mustard fish curry': '$19', 'Khichuri feast': '$15', 'Mishti doi': '$8' },
     rating: 4.8,
     preOrderHours: 36,
     dishes: [
       {
         name: 'Mustard fish curry',
-        image: 'https://loremflickr.com/1200/900/fish,curry,food?lock=211',
+        image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80',
         description: 'Salmon in mustard gravy with steamed rice.',
       },
       {
         name: 'Khichuri feast',
-        image: 'https://loremflickr.com/1200/900/rice,curry,food?lock=212',
+        image: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?w=600&q=80',
         description: 'Rainy-day lentil rice meal with pickles and sides.',
       },
       {
         name: 'Mishti doi',
-        image: 'https://loremflickr.com/1200/900/dessert,food?lock=213',
+        image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80',
         description: 'Caramelized sweet yogurt served chilled.',
       },
     ],
@@ -116,32 +101,27 @@ const SEED_COOKS = [
     name: 'Selam Bekele',
     culture: 'Ethiopian',
     location: 'Koreatown',
-    chefImage: 'https://loremflickr.com/1200/900/ethiopian,food?lock=301',
+    chefImage: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800&q=80',
     profileImage: 'https://i.pravatar.cc/200?img=48',
-    story:
-      'Cooking from a shared community kitchen with recipes from Addis family celebrations.',
+    story: 'Cooking from a shared community kitchen with recipes from Addis family celebrations.',
     priceRange: '$',
-    dishPrices: {
-      'Doro wat platter': '$17',
-      'Vegan injera set': '$14',
-      'Shiro stew': '$13',
-    },
+    dishPrices: { 'Doro wat platter': '$17', 'Vegan injera set': '$14', 'Shiro stew': '$13' },
     rating: 4.7,
     preOrderHours: 24,
     dishes: [
       {
         name: 'Doro wat platter',
-        image: 'https://loremflickr.com/1200/900/stew,food?lock=311',
+        image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&q=80',
         description: 'Slow cooked chicken stew with eggs and injera.',
       },
       {
         name: 'Vegan injera set',
-        image: 'https://loremflickr.com/1200/900/vegan,platter,food?lock=312',
+        image: 'https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=600&q=80',
         description: 'Colorful vegan combos for sharing.',
       },
       {
         name: 'Shiro stew',
-        image: 'https://loremflickr.com/1200/900/chickpea,stew,food?lock=313',
+        image: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80',
         description: 'Silky chickpea stew with berbere spices.',
       },
     ],
@@ -154,32 +134,27 @@ const SEED_COOKS = [
     name: 'Farah Yazdi',
     culture: 'Persian',
     location: 'Santa Monica',
-    chefImage: 'https://loremflickr.com/1200/900/persian,food?lock=401',
+    chefImage: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80',
     profileImage: 'https://i.pravatar.cc/200?img=20',
-    story:
-      'Modern Persian meal prep with herb-heavy stews and saffron rice.',
+    story: 'Modern Persian meal prep with herb-heavy stews and saffron rice.',
     priceRange: '$$$',
-    dishPrices: {
-      'Ghormeh sabzi': '$22',
-      'Zereshk polo': '$20',
-      'Kashk-e bademjan': '$16',
-    },
+    dishPrices: { 'Ghormeh sabzi': '$22', 'Zereshk polo': '$20', 'Kashk-e bademjan': '$16' },
     rating: 5.0,
     preOrderHours: 48,
     dishes: [
       {
         name: 'Ghormeh sabzi',
-        image: 'https://loremflickr.com/1200/900/herb,stew,food?lock=411',
+        image: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=600&q=80',
         description: 'Herb stew with kidney beans and dried lime.',
       },
       {
         name: 'Zereshk polo',
-        image: 'https://loremflickr.com/1200/900/rice,plate,food?lock=412',
+        image: 'https://images.unsplash.com/photo-1516684732162-798a0062be99?w=600&q=80',
         description: 'Saffron rice with barberries and roasted chicken.',
       },
       {
         name: 'Kashk-e bademjan',
-        image: 'https://loremflickr.com/1200/900/eggplant,dip,food?lock=413',
+        image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&q=80',
         description: 'Smoky eggplant dip with mint and whey.',
       },
     ],
@@ -202,6 +177,7 @@ const ADMIN_SEED = [
 
 const OPENAI_API_KEY = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
 const OPENAI_MODEL = process.env.EXPO_PUBLIC_OPENAI_MODEL || 'gpt-4.1-mini';
+
 const TAB_ITEMS = [
   { key: 'discover', label: 'Discover', icon: 'compass-outline', iconActive: 'compass' },
   { key: 'signup', label: 'Sign Up', icon: 'create-outline', iconActive: 'create' },
@@ -211,56 +187,47 @@ const TAB_ITEMS = [
 const extractAssistantText = (data) => {
   const topLevel = typeof data?.output_text === 'string' ? data.output_text.trim() : '';
   if (topLevel) return topLevel;
-
   const contentItems = Array.isArray(data?.output)
     ? data.output.flatMap((item) => (Array.isArray(item?.content) ? item.content : []))
     : [];
-
-  const contentText = contentItems
-    .map((item) => {
-      if (typeof item?.text === 'string') return item.text;
-      if (typeof item?.output_text === 'string') return item.output_text;
-      if (typeof item?.value === 'string') return item.value;
-      return '';
-    })
-    .filter(Boolean)
-    .join('\n')
-    .trim();
-
-  return contentText;
+  return contentItems.map((item) => item?.text || item?.output_text || item?.value || '').filter(Boolean).join('\n').trim();
 };
 
 const getDishPrice = (cook, dish) => cook?.dishPrices?.[dish] || '$--';
-const FALLBACK_DISH_IMAGE = 'https://loremflickr.com/1200/900/food?lock=999';
+const FALLBACK_DISH_IMAGE = 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80';
 const FALLBACK_PROFILE_IMAGE = 'https://i.pravatar.cc/200?img=11';
 
-const getMinRatingFromFilter = (ratingFilter) => {
-  if (ratingFilter === '4.5+') return 4.5;
-  if (ratingFilter === '4.8+') return 4.8;
-  if (ratingFilter === '5.0') return 5.0;
-  return 0;
-};
+const getMinRatingFromFilter = (r) => r === '4.5+' ? 4.5 : r === '4.8+' ? 4.8 : r === '5.0' ? 5.0 : 0;
 
 const normalizeDish = (cook, dish) => {
-  if (typeof dish === 'string') {
-    return {
-      name: dish,
-      image: FALLBACK_DISH_IMAGE,
-      description: '',
-      price: getDishPrice(cook, dish),
-    };
-  }
+  if (typeof dish === 'string') return { name: dish, image: FALLBACK_DISH_IMAGE, description: '', price: getDishPrice(cook, dish) };
   const name = dish?.name || 'Signature dish';
-  return {
-    ...dish,
-    name,
-    image: dish?.image || FALLBACK_DISH_IMAGE,
-    description: dish?.description || '',
-    price: dish?.price || getDishPrice(cook, name),
-  };
+  return { ...dish, name, image: dish?.image || FALLBACK_DISH_IMAGE, description: dish?.description || '', price: dish?.price || getDishPrice(cook, name) };
 };
 
-const getCookDishes = (cook) => (cook?.dishes || []).map((dish) => normalizeDish(cook, dish));
+const getCookDishes = (cook) => (cook?.dishes || []).map((d) => normalizeDish(cook, d));
+
+// ─── Palette ────────────────────────────────────────────────────────────────
+const C = {
+  bg: '#0F0A06',
+  surface: '#1A1208',
+  card: '#1E1510',
+  cardBorder: '#2E2018',
+  accent: '#E8633A',
+  accentLight: '#F0855A',
+  accentDark: '#C04A22',
+  gold: '#D4A853',
+  cream: '#F5EDD6',
+  creamDim: '#C8B898',
+  textPrimary: '#F5EDD6',
+  textSecondary: '#9A8060',
+  textMuted: '#5A4530',
+  white: '#FFFFFF',
+  overlay: 'rgba(10,6,2,0.55)',
+  navBg: '#120D08',
+};
+
+const serifFont = Platform.select({ ios: 'Georgia', android: 'serif', default: 'serif' });
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('discover');
@@ -280,49 +247,22 @@ export default function App() {
   const [selectedChefId, setSelectedChefId] = useState(null);
   const [chatInput, setChatInput] = useState('');
   const [chatMessages, setChatMessages] = useState([
-    {
-      id: 'assistant-welcome',
-      role: 'assistant',
-      text: 'Hi, I am your HomeTable assistant. Ask me what to order, what fits your diet, or how preorder timing works.',
-    },
+    { id: 'welcome', role: 'assistant', text: 'Hi! I\'m your HomeTable assistant. Ask me what to order, what fits your diet, or how preorder timing works.' },
   ]);
   const [isAssistantLoading, setIsAssistantLoading] = useState(false);
+  const [signupForm, setSignupForm] = useState({ name: '', culture: '', location: '', story: '', dishes: '' });
+  const [requestForm, setRequestForm] = useState({ name: '', contact: '', address: '', date: '', timeWindow: '', quantity: '2', notes: '' });
 
-  const [signupForm, setSignupForm] = useState({
-    name: '',
-    culture: '',
-    location: '',
-    story: '',
-    dishes: '',
-  });
-
-  const [requestForm, setRequestForm] = useState({
-    name: '',
-    contact: '',
-    address: '',
-    date: '',
-    timeWindow: '',
-    quantity: '2',
-    notes: '',
-  });
-
-  const locationOptions = useMemo(() => {
-    const uniqueLocations = [...new Set(cooks.map((cook) => cook.location))];
-    return [ANY_FILTER, ...uniqueLocations];
-  }, [cooks]);
+  const locationOptions = useMemo(() => [ANY_FILTER, ...new Set(cooks.map((c) => c.location))], [cooks]);
 
   const filteredCooks = useMemo(() => {
     const minRating = getMinRatingFromFilter(activeRating);
     return cooks.filter((cook) => {
       const matchesCuisine = activeCuisine === ANY_FILTER || cook.culture === activeCuisine;
       const matchesLocation = activeLocation === ANY_FILTER || cook.location === activeLocation;
-      const matchesDietary =
-        activeDietary === ANY_FILTER ||
-        (cook.dietary || []).some((tag) => tag.toLowerCase().includes(activeDietary.toLowerCase()));
+      const matchesDietary = activeDietary === ANY_FILTER || (cook.dietary || []).some((t) => t.toLowerCase().includes(activeDietary.toLowerCase()));
       const matchesPrice = activePrice === ANY_FILTER || cook.priceRange === activePrice;
-      const matchesRating = cook.rating >= minRating;
-      const matchesEco = !ecoOnly || Boolean(cook.ecoFriendly);
-      return matchesCuisine && matchesLocation && matchesDietary && matchesPrice && matchesRating && matchesEco;
+      return matchesCuisine && matchesLocation && matchesDietary && matchesPrice && cook.rating >= minRating && (!ecoOnly || cook.ecoFriendly);
     });
   }, [activeCuisine, activeLocation, activeDietary, activePrice, activeRating, ecoOnly, cooks]);
 
@@ -332,680 +272,288 @@ export default function App() {
     setRequestOpen(true);
   };
 
-  const toggleFilterMenu = (menuKey) => {
-    setActiveFilterMenu((current) => (current === menuKey ? '' : menuKey));
-  };
-
   const submitRequest = () => {
     if (!requestForm.name || !requestForm.contact || !requestForm.date) {
-      Alert.alert('Missing details', 'Please add your name, contact, and date.');
-      return;
+      Alert.alert('Missing details', 'Please add your name, contact, and date.'); return;
     }
-    const newOrder = {
-      id: `order-${orders.length + 1}`,
-      cookId: selectedCook?.id,
-      cookName: selectedCook?.name,
-      dish: selectedDish,
-      ...requestForm,
-      status: 'new',
-    };
-    setOrders([newOrder, ...orders]);
-    setRequestForm({
-      name: '',
-      contact: '',
-      address: '',
-      date: '',
-      timeWindow: '',
-      quantity: '2',
-      notes: '',
-    });
+    setOrders([{ id: `order-${orders.length + 1}`, cookId: selectedCook?.id, cookName: selectedCook?.name, dish: selectedDish, ...requestForm, status: 'new' }, ...orders]);
+    setRequestForm({ name: '', contact: '', address: '', date: '', timeWindow: '', quantity: '2', notes: '' });
     setRequestOpen(false);
-    Alert.alert('Request sent', 'Your order request was sent to the cook.');
+    Alert.alert('Request sent ✓', 'Your order request was sent to the cook.');
   };
 
   const submitSignup = () => {
     if (!signupForm.name || !signupForm.culture || !signupForm.location) {
-      Alert.alert('Missing details', 'Please add your name, cuisine, and location.');
-      return;
+      Alert.alert('Missing details', 'Please add your name, cuisine, and location.'); return;
     }
-    const newSignup = {
-      id: `signup-${signups.length + 1}`,
-      ...signupForm,
-      status: 'pending',
-    };
-    setSignups([newSignup, ...signups]);
+    setSignups([{ id: `signup-${signups.length + 1}`, ...signupForm, status: 'pending' }, ...signups]);
     setSignupForm({ name: '', culture: '', location: '', story: '', dishes: '' });
-    Alert.alert('Thanks for signing up', 'We will review your profile shortly.');
+    Alert.alert('Application submitted', 'We\'ll review your profile shortly.');
   };
 
-  const approveSignup = (signupId) => {
-    const signup = signups.find((item) => item.id === signupId);
-    if (!signup) return;
-    setSignups((prev) =>
-      prev.map((item) =>
-        item.id === signupId ? { ...item, status: 'approved' } : item
-      )
-    );
-    setCooks((prev) => [
-      {
-        id: `cook-${prev.length + 1}`,
-        name: signup.name,
-        culture: signup.culture,
-        location: signup.location,
-        chefImage: FALLBACK_DISH_IMAGE,
-        profileImage: FALLBACK_PROFILE_IMAGE,
-        story: signup.story || 'New HomeTable cook profile pending full bio.',
-        priceRange: '$$',
-        rating: 5.0,
-        preOrderHours: 24,
-        dishes: signup.dishes ? signup.dishes.split(',').map((d) => d.trim()) : ['Signature dish'],
-        dishPrices: {},
-        tags: ['New cook'],
-        dietary: [],
-        ecoFriendly: false,
-      },
-      ...prev,
-    ]);
-  };
+  const cookContext = useMemo(() =>
+    cooks.map((cook) => {
+      const dishesStr = getCookDishes(cook).map((d) => `${d.name} (${d.price})`).join(', ');
+      return `${cook.name} (${cook.culture}, ${cook.location}) | Dishes: ${dishesStr} | Tags: ${(cook.tags || []).join(', ')} | Preorder: ${cook.preOrderHours}h`;
+    }).join('\n'), [cooks]);
 
-  const cookContext = useMemo(() => {
-    return cooks
-      .map((cook) => {
-        const dishesWithPrices = getCookDishes(cook)
-          .map((dish) => `${dish.name} (${dish.price})`)
-          .join(', ');
-        return `${cook.name} (${cook.culture}, ${cook.location}) | Dishes: ${dishesWithPrices} | Tags: ${(cook.tags || []).join(', ')} | Preorder: ${cook.preOrderHours}h`;
-      })
-      .join('\n');
-  }, [cooks]);
-  const selectedChef = useMemo(
-    () => cooks.find((cook) => cook.id === selectedChefId) || null,
-    [cooks, selectedChefId]
-  );
-
-  const buildFallbackReply = (message) => {
-    const normalized = message.toLowerCase();
-    if (normalized.includes('recommend') || normalized.includes('suggest')) {
-      return 'Try Bengali mustard fish curry, Ethiopian vegan injera set, or Persian ghormeh sabzi.';
-    }
-    if (normalized.includes('vegetarian') || normalized.includes('vegan')) {
-      return 'Vegetarian-friendly picks: Tlayudas, Vegan injera set, and Kashk-e bademjan.';
-    }
-    return 'I can help with recommendations, dietary filters, and preorder timing.';
-  };
+  const selectedChef = useMemo(() => cooks.find((c) => c.id === selectedChefId) || null, [cooks, selectedChefId]);
 
   const getAssistantReply = async (message) => {
-    if (!OPENAI_API_KEY) {
-      return 'Missing OpenAI key. Add EXPO_PUBLIC_OPENAI_API_KEY to your .env file and restart Expo.';
-    }
-
+    if (!OPENAI_API_KEY) return 'Missing OpenAI key. Add EXPO_PUBLIC_OPENAI_API_KEY to your .env file.';
     const response = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-      },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${OPENAI_API_KEY}` },
       body: JSON.stringify({
         model: OPENAI_MODEL,
         input: [
-          {
-            role: 'system',
-            content: [
-              {
-                type: 'input_text',
-                text:
-                  'You are HomeTable Assistant. Give concise food and preorder guidance based only on listed cooks. If data is missing, say so clearly.',
-              },
-            ],
-          },
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'input_text',
-                text: `Cook catalog:\n${cookContext}\n\nUser question: ${message}`,
-              },
-            ],
-          },
+          { role: 'system', content: [{ type: 'input_text', text: 'You are HomeTable Assistant. Give concise food and preorder guidance based only on listed cooks.' }] },
+          { role: 'user', content: [{ type: 'input_text', text: `Cook catalog:\n${cookContext}\n\nUser question: ${message}` }] },
         ],
         max_output_tokens: 240,
       }),
     });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`OpenAI request failed: ${response.status} ${errorText}`);
-    }
-
+    if (!response.ok) throw new Error(`OpenAI error: ${response.status}`);
     const data = await response.json();
-    const outputText = extractAssistantText(data);
-    if (outputText) return outputText;
-
-    const statusReason = data?.status ? ` (status: ${data.status})` : '';
-    throw new Error(`OpenAI returned no text content${statusReason}`);
+    const text = extractAssistantText(data);
+    if (text) return text;
+    throw new Error('No text returned');
   };
 
   const sendMessage = async () => {
-    const trimmedMessage = chatInput.trim();
-    if (!trimmedMessage || isAssistantLoading) return;
-
-    const userMessage = {
-      id: `user-${Date.now()}`,
-      role: 'user',
-      text: trimmedMessage,
-    };
-
+    const msg = chatInput.trim();
+    if (!msg || isAssistantLoading) return;
     setChatInput('');
-    setChatMessages((prev) => [...prev, userMessage]);
+    setChatMessages((prev) => [...prev, { id: `u-${Date.now()}`, role: 'user', text: msg }]);
     setIsAssistantLoading(true);
-
     try {
-      const assistantText = await getAssistantReply(trimmedMessage);
-      const assistantMessage = {
-        id: `assistant-${Date.now() + 1}`,
-        role: 'assistant',
-        text: assistantText,
-      };
-      setChatMessages((prev) => [...prev, assistantMessage]);
-    } catch (error) {
-      const assistantMessage = {
-        id: `assistant-${Date.now() + 1}`,
-        role: 'assistant',
-        text:
-          typeof error?.message === 'string' && error.message
-            ? `Assistant error: ${error.message}`
-            : buildFallbackReply(trimmedMessage),
-      };
-      setChatMessages((prev) => [...prev, assistantMessage]);
-      Alert.alert('Assistant temporarily unavailable', 'Check the error shown in chat and your terminal logs.');
-      console.error(error);
+      const reply = await getAssistantReply(msg);
+      setChatMessages((prev) => [...prev, { id: `a-${Date.now()}`, role: 'assistant', text: reply }]);
+    } catch (e) {
+      setChatMessages((prev) => [...prev, { id: `a-${Date.now()}`, role: 'assistant', text: 'I can help with recommendations, dietary filters, and preorder timing.' }]);
     } finally {
       setIsAssistantLoading(false);
     }
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" />
-      <View style={styles.header}>
-        <Text style={styles.title}>HomeTable</Text>
-        <Text style={styles.subtitle}>Los Angeles preorder marketplace</Text>
+    <SafeAreaView style={s.safeArea}>
+      <StatusBar barStyle="light-content" backgroundColor={C.bg} />
+
+      {/* ── Header ── */}
+      <View style={s.header}>
+        <View>
+          <Text style={s.headerTitle}>HomeTable</Text>
+          <Text style={s.headerSub}>Los Angeles preorder marketplace</Text>
+        </View>
+        <View style={s.headerDot} />
       </View>
 
-      <View style={styles.screenContent}>
+      {/* ── Screens ── */}
+      <View style={s.screenContent}>
+
+        {/* DISCOVER */}
         {activeTab === 'discover' && (
-          <ScrollView contentContainerStyle={styles.content}>
-            <View pointerEvents="none" style={styles.decorWrap}>
-              <View style={styles.decorBlobPrimary} />
-              <View style={styles.decorBlobSecondary} />
-              <View style={styles.decorBlobTertiary} />
-            </View>
+          <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+
             {!selectedChef && (
               <>
-                <View style={styles.checkoutHeader}>
-                  <Text style={styles.checkoutEyebrow}>Meal Plans</Text>
-                  <Text style={styles.sectionTitle}>Plan your weekly drop-off</Text>
-                  <Text style={styles.sectionCopy}>
-                    Browse chefs, pick dishes with photos, and request your delivery window.
-                  </Text>
-                  <View style={styles.checkoutStatsRow}>
-                    <View style={styles.checkoutStat}>
-                      <Text style={styles.checkoutStatNumber}>{filteredCooks.length}</Text>
-                      <Text style={styles.checkoutStatLabel}>Chefs available</Text>
-                    </View>
-                    <View style={styles.checkoutStat}>
-                      <Text style={styles.checkoutStatNumber}>24h+</Text>
-                      <Text style={styles.checkoutStatLabel}>Preorder notice</Text>
+                {/* Hero banner */}
+                <View style={s.heroBanner}>
+                  <Image source={{ uri: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900&q=80' }} style={s.heroBannerImage} />
+                  <View style={s.heroBannerOverlay} />
+                  <View style={s.heroBannerContent}>
+                    <Text style={s.heroBannerEye}>AUTHENTIC · HOMEMADE</Text>
+                    <Text style={s.heroBannerTitle}>Food made with{'\n'}love & culture</Text>
+                    <View style={s.heroBannerStats}>
+                      <View style={s.heroBannerStat}>
+                        <Text style={s.heroBannerStatNum}>{filteredCooks.length}</Text>
+                        <Text style={s.heroBannerStatLbl}>Chefs</Text>
+                      </View>
+                      <View style={s.heroBannerStatDivider} />
+                      <View style={s.heroBannerStat}>
+                        <Text style={s.heroBannerStatNum}>24h+</Text>
+                        <Text style={s.heroBannerStatLbl}>Preorder</Text>
+                      </View>
+                      <View style={s.heroBannerStatDivider} />
+                      <View style={s.heroBannerStat}>
+                        <Text style={s.heroBannerStatNum}>LA</Text>
+                        <Text style={s.heroBannerStatLbl}>Delivery</Text>
+                      </View>
                     </View>
                   </View>
                 </View>
 
-                <View style={styles.section}>
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterBarRow}>
-                    <Pressable
-                      style={[styles.filterBarButton, activeFilterMenu === 'location' && styles.filterBarButtonActive]}
-                      onPress={() => toggleFilterMenu('location')}
-                    >
-                      <View style={styles.filterBarInner}>
-                        <Text style={[styles.filterBarLabelSingle, activeFilterMenu === 'location' && styles.filterBarLabelSingleActive]}>
-                          Location
+                {/* Filter bar */}
+                <View style={s.filterSection}>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.filterBarRow}>
+                    {['culture', 'location', 'dietary', 'price', 'more'].map((key) => (
+                      <Pressable
+                        key={key}
+                        style={[s.filterBtn, activeFilterMenu === key && s.filterBtnActive]}
+                        onPress={() => setActiveFilterMenu((cur) => cur === key ? '' : key)}
+                      >
+                        <Text style={[s.filterBtnText, activeFilterMenu === key && s.filterBtnTextActive]}>
+                          {key.charAt(0).toUpperCase() + key.slice(1)}
                         </Text>
-                        <Ionicons name="chevron-down" size={14} color={activeFilterMenu === 'location' ? '#FFFDF8' : '#102A43'} />
-                      </View>
-                    </Pressable>
-                    <Pressable
-                      style={[styles.filterBarButton, activeFilterMenu === 'dietary' && styles.filterBarButtonActive]}
-                      onPress={() => toggleFilterMenu('dietary')}
-                    >
-                      <View style={styles.filterBarInner}>
-                        <Text style={[styles.filterBarLabelSingle, activeFilterMenu === 'dietary' && styles.filterBarLabelSingleActive]}>
-                          Dietary
-                        </Text>
-                        <Ionicons name="chevron-down" size={14} color={activeFilterMenu === 'dietary' ? '#FFFDF8' : '#102A43'} />
-                      </View>
-                    </Pressable>
-                    <Pressable
-                      style={[styles.filterBarButton, activeFilterMenu === 'culture' && styles.filterBarButtonActive]}
-                      onPress={() => toggleFilterMenu('culture')}
-                    >
-                      <View style={styles.filterBarInner}>
-                        <Text style={[styles.filterBarLabelSingle, activeFilterMenu === 'culture' && styles.filterBarLabelSingleActive]}>
-                          Culture
-                        </Text>
-                        <Ionicons name="chevron-down" size={14} color={activeFilterMenu === 'culture' ? '#FFFDF8' : '#102A43'} />
-                      </View>
-                    </Pressable>
-                    <Pressable
-                      style={[styles.filterBarButton, activeFilterMenu === 'price' && styles.filterBarButtonActive]}
-                      onPress={() => toggleFilterMenu('price')}
-                    >
-                      <View style={styles.filterBarInner}>
-                        <Text style={[styles.filterBarLabelSingle, activeFilterMenu === 'price' && styles.filterBarLabelSingleActive]}>
-                          Price
-                        </Text>
-                        <Ionicons name="chevron-down" size={14} color={activeFilterMenu === 'price' ? '#FFFDF8' : '#102A43'} />
-                      </View>
-                    </Pressable>
-                    <Pressable
-                      style={[styles.filterBarButton, activeFilterMenu === 'more' && styles.filterBarButtonActive]}
-                      onPress={() => toggleFilterMenu('more')}
-                    >
-                      <View style={styles.filterBarInner}>
-                        <Text style={[styles.filterBarLabelSingle, activeFilterMenu === 'more' && styles.filterBarLabelSingleActive]}>
-                          More
-                        </Text>
-                        <Ionicons name="chevron-down" size={14} color={activeFilterMenu === 'more' ? '#FFFDF8' : '#102A43'} />
-                      </View>
-                    </Pressable>
+                        <Ionicons name="chevron-down" size={12} color={activeFilterMenu === key ? C.bg : C.creamDim} style={{ marginLeft: 4 }} />
+                      </Pressable>
+                    ))}
                   </ScrollView>
 
-                  {activeFilterMenu === 'location' && (
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
-                      {locationOptions.map((location) => (
-                        <Pressable
-                          key={location}
-                          onPress={() => setActiveLocation(location)}
-                          style={[styles.chip, activeLocation === location && styles.chipActive]}
-                        >
-                          <Text style={[styles.chipText, activeLocation === location && styles.chipTextActive]}>{location}</Text>
-                        </Pressable>
-                      ))}
-                    </ScrollView>
-                  )}
-
-                  {activeFilterMenu === 'dietary' && (
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
-                      {DIETARY_OPTIONS.map((dietary) => (
-                        <Pressable
-                          key={dietary}
-                          onPress={() => setActiveDietary(dietary)}
-                          style={[styles.chip, activeDietary === dietary && styles.chipActive]}
-                        >
-                          <Text style={[styles.chipText, activeDietary === dietary && styles.chipTextActive]}>{dietary}</Text>
-                        </Pressable>
-                      ))}
-                    </ScrollView>
-                  )}
-
                   {activeFilterMenu === 'culture' && (
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
-                      {CUISINES.map((cuisine) => (
-                        <Pressable
-                          key={cuisine}
-                          onPress={() => setActiveCuisine(cuisine)}
-                          style={[styles.chip, activeCuisine === cuisine && styles.chipActive]}
-                        >
-                          <Text style={[styles.chipText, activeCuisine === cuisine && styles.chipTextActive]}>{cuisine}</Text>
-                        </Pressable>
-                      ))}
-                    </ScrollView>
+                    <FilterChips options={CUISINES} active={activeCuisine} onSelect={setActiveCuisine} />
                   )}
-
+                  {activeFilterMenu === 'location' && (
+                    <FilterChips options={locationOptions} active={activeLocation} onSelect={setActiveLocation} />
+                  )}
+                  {activeFilterMenu === 'dietary' && (
+                    <FilterChips options={DIETARY_OPTIONS} active={activeDietary} onSelect={setActiveDietary} />
+                  )}
                   {activeFilterMenu === 'price' && (
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
-                      {PRICE_OPTIONS.map((price) => (
-                        <Pressable
-                          key={price}
-                          onPress={() => setActivePrice(price)}
-                          style={[styles.chip, activePrice === price && styles.chipActive]}
-                        >
-                          <Text style={[styles.chipText, activePrice === price && styles.chipTextActive]}>{price}</Text>
-                        </Pressable>
-                      ))}
-                    </ScrollView>
+                    <FilterChips options={PRICE_OPTIONS} active={activePrice} onSelect={setActivePrice} />
                   )}
-
                   {activeFilterMenu === 'more' && (
-                    <View style={styles.moreFilterRow}>
-                      {RATING_OPTIONS.map((ratingOption) => (
-                        <Pressable
-                          key={ratingOption}
-                          onPress={() => setActiveRating(ratingOption)}
-                          style={[styles.smallChip, activeRating === ratingOption && styles.smallChipActive]}
-                        >
-                          <Text style={[styles.smallChipText, activeRating === ratingOption && styles.smallChipTextActive]}>
-                            {ratingOption}
-                          </Text>
+                    <View style={s.moreRow}>
+                      {RATING_OPTIONS.map((r) => (
+                        <Pressable key={r} onPress={() => setActiveRating(r)} style={[s.smallChip, activeRating === r && s.smallChipActive]}>
+                          <Text style={[s.smallChipText, activeRating === r && s.smallChipTextActive]}>{r}</Text>
                         </Pressable>
                       ))}
-                      <Pressable
-                        onPress={() => setEcoOnly((current) => !current)}
-                        style={[styles.smallChip, ecoOnly && styles.smallChipActive]}
-                      >
-                        <Text style={[styles.smallChipText, ecoOnly && styles.smallChipTextActive]}>Eco-friendly only</Text>
+                      <Pressable onPress={() => setEcoOnly((v) => !v)} style={[s.smallChip, ecoOnly && s.smallChipActive]}>
+                        <Text style={[s.smallChipText, ecoOnly && s.smallChipTextActive]}>🌿 Eco only</Text>
                       </Pressable>
                     </View>
                   )}
                 </View>
 
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Featured home cooks</Text>
-                  {filteredCooks.length === 0 && (
-                    <View style={styles.emptyStateCard}>
-                      <Text style={styles.emptyStateTitle}>No chefs match those filters yet</Text>
-                      <Text style={styles.emptyStateCopy}>Try opening another filter and broadening your selection.</Text>
+                {/* Cook cards */}
+                <View style={s.cardsSection}>
+                  <Text style={s.sectionHeading}>Featured cooks</Text>
+                  {filteredCooks.length === 0 ? (
+                    <View style={s.emptyCard}>
+                      <Text style={s.emptyTitle}>No chefs match those filters</Text>
+                      <Text style={s.emptySub}>Try broadening your selection.</Text>
                     </View>
+                  ) : (
+                    filteredCooks.map((cook) => (
+                      <CookCard key={cook.id} cook={cook} onRequest={openRequest} onProfile={() => setSelectedChefId(cook.id)} />
+                    ))
                   )}
-                  {filteredCooks.map((cook) => {
-                    const dishes = getCookDishes(cook);
-                    return (
-                      <View key={cook.id} style={styles.card}>
-                        <View style={styles.heroImageWrap}>
-                          <SmartImage uri={cook.chefImage} fallbackUri={FALLBACK_DISH_IMAGE} style={styles.cardHeroImage} />
-                          <View style={styles.heroOverlay} />
-                          <View style={styles.heroBadge}>
-                            <Text style={styles.heroBadgeText}>{cook.culture}</Text>
-                          </View>
-                          <View style={styles.profileBubble}>
-                            <SmartImage
-                              uri={cook.profileImage}
-                              fallbackUri={FALLBACK_PROFILE_IMAGE}
-                              style={styles.profileBubbleImage}
-                            />
-                          </View>
-                        </View>
-                        <View style={styles.cardHeader}>
-                          <View>
-                            <Text style={styles.cardTitle}>{cook.name}</Text>
-                            <Text style={styles.cardMeta}>{cook.culture} • {cook.location}</Text>
-                          </View>
-                          <View style={styles.ratingPill}>
-                            <Text style={styles.ratingText}>{cook.rating.toFixed(1)}</Text>
-                          </View>
-                        </View>
-                        <Text style={styles.cardStory}>{cook.story}</Text>
-                        <View style={styles.tagRow}>
-                          {(cook.tags || []).map((tag) => (
-                            <Text key={tag} style={styles.tag}>{tag}</Text>
-                          ))}
-                        </View>
-                        <Text style={styles.dishLabel}>Popular dishes</Text>
-                        {dishes.map((dish) => (
-                          <Pressable key={dish.name} onPress={() => openRequest(cook, dish.name)} style={styles.dishRow}>
-                            <View style={styles.dishIdentity}>
-                              <SmartImage uri={dish.image} fallbackUri={FALLBACK_DISH_IMAGE} style={styles.dishThumb} />
-                              <View>
-                                <Text style={styles.dishName}>{dish.name}</Text>
-                                {!!dish.description && <Text style={styles.dishDescription}>{dish.description}</Text>}
-                              </View>
-                            </View>
-                            <View style={styles.dishMeta}>
-                              <Text style={styles.dishPrice}>{dish.price}</Text>
-                              <Text style={styles.dishAction}>Request</Text>
-                            </View>
-                          </Pressable>
-                        ))}
-                        <View style={styles.cardFooter}>
-                          <Text style={styles.preorder}>Preorder {cook.preOrderHours}h notice</Text>
-                          <Text style={styles.price}>{cook.priceRange}</Text>
-                        </View>
-                        <Pressable style={styles.profileButton} onPress={() => setSelectedChefId(cook.id)}>
-                          <Text style={styles.profileButtonText}>View chef profile</Text>
-                        </Pressable>
-                      </View>
-                    );
-                  })}
                 </View>
               </>
             )}
 
+            {/* Chef profile */}
             {selectedChef && (
-              <View style={styles.section}>
-                <Pressable onPress={() => setSelectedChefId(null)} style={styles.backButton}>
-                  <Ionicons name="chevron-back" size={18} color="#102A43" />
-                  <Text style={styles.backButtonText}>Back to all chefs</Text>
+              <View style={s.cardsSection}>
+                <Pressable onPress={() => setSelectedChefId(null)} style={s.backBtn}>
+                  <Ionicons name="chevron-back" size={16} color={C.accent} />
+                  <Text style={s.backBtnText}>All chefs</Text>
                 </Pressable>
-
-                <View style={styles.profileCard}>
-                  <View style={styles.heroImageWrap}>
-                    <SmartImage uri={selectedChef.chefImage} fallbackUri={FALLBACK_DISH_IMAGE} style={styles.profileHeroImage} />
-                    <View style={styles.heroOverlay} />
-                    <View style={styles.heroBadge}>
-                      <Text style={styles.heroBadgeText}>{selectedChef.culture}</Text>
-                    </View>
-                    <View style={styles.profileBubbleLarge}>
-                      <SmartImage
-                        uri={selectedChef.profileImage}
-                        fallbackUri={FALLBACK_PROFILE_IMAGE}
-                        style={styles.profileBubbleLargeImage}
-                      />
-                    </View>
-                  </View>
-                  <View style={styles.cardHeader}>
-                    <View>
-                      <Text style={styles.cardTitle}>{selectedChef.name}</Text>
-                      <Text style={styles.cardMeta}>{selectedChef.culture} • {selectedChef.location}</Text>
-                    </View>
-                    <View style={styles.ratingPill}>
-                      <Text style={styles.ratingText}>{selectedChef.rating.toFixed(1)}</Text>
-                    </View>
-                  </View>
-                  <Text style={styles.cardStory}>{selectedChef.story}</Text>
-                  <Text style={styles.profileSectionTitle}>Menu photos</Text>
-                  {getCookDishes(selectedChef).map((dish) => (
-                    <View key={dish.name} style={styles.profileDishCard}>
-                      <SmartImage uri={dish.image} fallbackUri={FALLBACK_DISH_IMAGE} style={styles.profileDishImage} />
-                      <View style={styles.profileDishContent}>
-                        <Text style={styles.dishName}>{dish.name}</Text>
-                        {!!dish.description && <Text style={styles.dishDescription}>{dish.description}</Text>}
-                        <View style={styles.profileDishFooter}>
-                          <Text style={styles.dishPrice}>{dish.price}</Text>
-                          <Pressable onPress={() => openRequest(selectedChef, dish.name)}>
-                            <Text style={styles.dishAction}>Request this</Text>
-                          </Pressable>
-                        </View>
-                      </View>
-                    </View>
-                  ))}
-                </View>
+                <ChefProfile chef={selectedChef} onRequest={openRequest} />
               </View>
             )}
           </ScrollView>
         )}
 
+        {/* SIGN UP */}
         {activeTab === 'signup' && (
-          <ScrollView contentContainerStyle={styles.content}>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Become a HomeTable cook</Text>
-              <Text style={styles.sectionCopy}>
-                Share your cultural recipes with neighbors. We prioritize authentic stories and pre-order planning.
-              </Text>
-              <FormField
-                label="Your name"
-                value={signupForm.name}
-                onChangeText={(text) => setSignupForm({ ...signupForm, name: text })}
-                placeholder="Chef name"
-              />
-              <FormField
-                label="Cuisine / region"
-                value={signupForm.culture}
-                onChangeText={(text) => setSignupForm({ ...signupForm, culture: text })}
-                placeholder="Burmese, Puerto Rican, etc."
-              />
-              <FormField
-                label="Neighborhood"
-                value={signupForm.location}
-                onChangeText={(text) => setSignupForm({ ...signupForm, location: text })}
-                placeholder="Leimert Park"
-              />
-              <FormField
-                label="Short story"
-                value={signupForm.story}
-                onChangeText={(text) => setSignupForm({ ...signupForm, story: text })}
-                placeholder="Why you cook"
-                multiline
-              />
-              <FormField
-                label="Signature dishes (comma separated)"
-                value={signupForm.dishes}
-                onChangeText={(text) => setSignupForm({ ...signupForm, dishes: text })}
-                placeholder="Jollof rice, suya, puff puff"
-              />
-              <PrimaryButton label="Submit application" onPress={submitSignup} />
+          <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+            <View style={s.cardsSection}>
+              <View style={s.signupHero}>
+                <Text style={s.signupHeroEye}>JOIN THE TABLE</Text>
+                <Text style={s.signupHeroTitle}>Share your{'\n'}culinary story</Text>
+                <Text style={s.signupHeroCopy}>Cook authentic meals for your community. Set your own prices. Own your brand.</Text>
+              </View>
+              <View style={s.formCard}>
+                <FormField label="Your name" value={signupForm.name} onChangeText={(t) => setSignupForm({ ...signupForm, name: t })} placeholder="Chef name" />
+                <FormField label="Cuisine / region" value={signupForm.culture} onChangeText={(t) => setSignupForm({ ...signupForm, culture: t })} placeholder="Burmese, Puerto Rican, etc." />
+                <FormField label="Neighborhood" value={signupForm.location} onChangeText={(t) => setSignupForm({ ...signupForm, location: t })} placeholder="Leimert Park" />
+                <FormField label="Short story" value={signupForm.story} onChangeText={(t) => setSignupForm({ ...signupForm, story: t })} placeholder="Why you cook..." multiline />
+                <FormField label="Signature dishes (comma separated)" value={signupForm.dishes} onChangeText={(t) => setSignupForm({ ...signupForm, dishes: t })} placeholder="Jollof rice, suya, puff puff" />
+                <PrimaryButton label="Submit application" onPress={submitSignup} />
+              </View>
             </View>
           </ScrollView>
         )}
 
+        {/* ASSISTANT */}
         {activeTab === 'assistant' && (
-          <View style={styles.assistantContainer}>
-            <ScrollView contentContainerStyle={styles.assistantMessages}>
-              {chatMessages.map((message) => (
-                <View
-                  key={message.id}
-                  style={[
-                    styles.chatBubble,
-                    message.role === 'user' ? styles.chatBubbleUser : styles.chatBubbleAssistant,
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.chatText,
-                      message.role === 'user' ? styles.chatTextUser : styles.chatTextAssistant,
-                    ]}
-                  >
-                    {message.text}
-                  </Text>
+          <View style={s.assistantWrap}>
+            <ScrollView contentContainerStyle={s.assistantMessages} showsVerticalScrollIndicator={false}>
+              {chatMessages.map((msg) => (
+                <View key={msg.id} style={[s.bubble, msg.role === 'user' ? s.bubbleUser : s.bubbleAssistant]}>
+                  {msg.role === 'assistant' && <Text style={s.bubbleLabel}>HomeTable AI</Text>}
+                  <Text style={[s.bubbleText, msg.role === 'user' ? s.bubbleTextUser : s.bubbleTextAssistant]}>{msg.text}</Text>
                 </View>
               ))}
               {isAssistantLoading && (
-                <View style={[styles.chatBubble, styles.chatBubbleAssistant]}>
-                  <Text style={[styles.chatText, styles.chatTextAssistant]}>Thinking...</Text>
+                <View style={[s.bubble, s.bubbleAssistant]}>
+                  <Text style={s.bubbleLabel}>HomeTable AI</Text>
+                  <Text style={s.bubbleTextAssistant}>Thinking…</Text>
                 </View>
               )}
             </ScrollView>
-
-            <View style={styles.chatInputRow}>
+            <View style={s.chatInputRow}>
               <TextInput
                 value={chatInput}
                 onChangeText={setChatInput}
-                placeholder="Ask the assistant..."
-                placeholderTextColor="#B6A89B"
-                style={styles.chatInput}
+                placeholder="Ask about dishes, diets, timing…"
+                placeholderTextColor={C.textMuted}
+                style={s.chatInput}
+                onSubmitEditing={sendMessage}
               />
-              <Pressable
-                onPress={sendMessage}
-                disabled={isAssistantLoading}
-                style={[styles.chatSendButton, isAssistantLoading && styles.chatSendButtonDisabled]}
-              >
-                <Text style={styles.chatSendText}>Send</Text>
+              <Pressable onPress={sendMessage} disabled={isAssistantLoading} style={[s.sendBtn, isAssistantLoading && { opacity: 0.5 }]}>
+                <Ionicons name="arrow-up" size={18} color={C.bg} />
               </Pressable>
             </View>
           </View>
         )}
       </View>
 
-      <View style={styles.bottomNav}>
+      {/* ── Bottom Nav ── */}
+      <View style={s.bottomNav}>
         {TAB_ITEMS.map((item) => (
-          <TabButton
-            key={item.key}
-            label={item.label}
-            icon={item.icon}
-            iconActive={item.iconActive}
-            active={activeTab === item.key}
-            onPress={() => setActiveTab(item.key)}
-          />
+          <TabButton key={item.key} item={item} active={activeTab === item.key} onPress={() => setActiveTab(item.key)} />
         ))}
       </View>
 
+      {/* ── Order Modal ── */}
       <Modal visible={requestOpen} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Request order</Text>
-            <Text style={styles.modalSubtitle}>
-              {selectedCook?.name} • {selectedCook?.culture}
-            </Text>
-            <Text style={styles.modalLabel}>Select dish</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.dishPicker}>
+        <View style={s.modalOverlay}>
+          <View style={s.modalCard}>
+            <View style={s.modalHandle} />
+            <Text style={s.modalTitle}>Request order</Text>
+            <Text style={s.modalSub}>{selectedCook?.name} · {selectedCook?.culture}</Text>
+
+            <Text style={s.modalLabel}>SELECT DISH</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 10, paddingRight: 10 }}>
               {getCookDishes(selectedCook).map((dish) => (
-                <Pressable
-                  key={dish.name}
-                  onPress={() => setSelectedDish(dish.name)}
-                  style={[styles.dishChip, selectedDish === dish.name && styles.dishChipActive]}
-                >
-                  <Text style={[styles.dishChipText, selectedDish === dish.name && styles.dishChipTextActive]}>
-                    {dish.name}
-                  </Text>
+                <Pressable key={dish.name} onPress={() => setSelectedDish(dish.name)} style={[s.dishChip, selectedDish === dish.name && s.dishChipActive]}>
+                  <Text style={[s.dishChipText, selectedDish === dish.name && s.dishChipTextActive]}>{dish.name}</Text>
                 </Pressable>
               ))}
             </ScrollView>
 
-            <FormField
-              label="Your name"
-              value={requestForm.name}
-              onChangeText={(text) => setRequestForm({ ...requestForm, name: text })}
-              placeholder="Customer name"
-            />
-            <FormField
-              label="Phone or email"
-              value={requestForm.contact}
-              onChangeText={(text) => setRequestForm({ ...requestForm, contact: text })}
-              placeholder="name@email.com"
-            />
-            <FormField
-              label="Delivery address"
-              value={requestForm.address}
-              onChangeText={(text) => setRequestForm({ ...requestForm, address: text })}
-              placeholder="Street, city"
-            />
-            <View style={styles.row}>
-              <View style={styles.rowItem}>
-                <FormField
-                  label="Date"
-                  value={requestForm.date}
-                  onChangeText={(text) => setRequestForm({ ...requestForm, date: text })}
-                  placeholder="YYYY-MM-DD"
-                />
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <FormField label="Your name" value={requestForm.name} onChangeText={(t) => setRequestForm({ ...requestForm, name: t })} placeholder="Customer name" />
+              <FormField label="Phone or email" value={requestForm.contact} onChangeText={(t) => setRequestForm({ ...requestForm, contact: t })} placeholder="name@email.com" />
+              <FormField label="Delivery address" value={requestForm.address} onChangeText={(t) => setRequestForm({ ...requestForm, address: t })} placeholder="Street, city" />
+              <View style={{ flexDirection: 'row', gap: 12 }}>
+                <View style={{ flex: 1 }}><FormField label="Date" value={requestForm.date} onChangeText={(t) => setRequestForm({ ...requestForm, date: t })} placeholder="YYYY-MM-DD" /></View>
+                <View style={{ flex: 1 }}><FormField label="Time window" value={requestForm.timeWindow} onChangeText={(t) => setRequestForm({ ...requestForm, timeWindow: t })} placeholder="5–7 PM" /></View>
               </View>
-              <View style={styles.rowItem}>
-                <FormField
-                  label="Time window"
-                  value={requestForm.timeWindow}
-                  onChangeText={(text) => setRequestForm({ ...requestForm, timeWindow: text })}
-                  placeholder="5-7 PM"
-                />
-              </View>
-            </View>
-            <FormField
-              label="Servings"
-              value={requestForm.quantity}
-              onChangeText={(text) => setRequestForm({ ...requestForm, quantity: text })}
-              placeholder="2"
-              keyboardType="number-pad"
-            />
-            <FormField
-              label="Notes"
-              value={requestForm.notes}
-              onChangeText={(text) => setRequestForm({ ...requestForm, notes: text })}
-              placeholder="Allergies, spice level, etc."
-              multiline
-            />
+              <FormField label="Servings" value={requestForm.quantity} onChangeText={(t) => setRequestForm({ ...requestForm, quantity: t })} placeholder="2" keyboardType="number-pad" />
+              <FormField label="Notes" value={requestForm.notes} onChangeText={(t) => setRequestForm({ ...requestForm, notes: t })} placeholder="Allergies, spice level, etc." multiline />
+            </ScrollView>
 
-            <View style={styles.modalActions}>
-              <Pressable onPress={() => setRequestOpen(false)} style={styles.modalSecondaryButton}>
-                <Text style={styles.secondaryButtonText}>Cancel</Text>
+            <View style={s.modalActions}>
+              <Pressable onPress={() => setRequestOpen(false)} style={s.modalCancel}>
+                <Text style={s.modalCancelText}>Cancel</Text>
               </Pressable>
-              <Pressable onPress={submitRequest} style={styles.modalPrimaryButton}>
-                <Text style={styles.primaryButtonText}>Send request</Text>
+              <Pressable onPress={submitRequest} style={s.modalConfirm}>
+                <Text style={s.modalConfirmText}>Send request</Text>
               </Pressable>
             </View>
           </View>
@@ -1015,786 +563,418 @@ export default function App() {
   );
 }
 
-function TabButton({ label, icon, iconActive, active, onPress }) {
-  const iconName = active ? iconActive : icon;
+// ─── Cook Card ───────────────────────────────────────────────────────────────
+function CookCard({ cook, onRequest, onProfile }) {
+  const dishes = getCookDishes(cook);
   return (
-    <Pressable onPress={onPress} style={[styles.tabButton, active && styles.tabButtonActive]}>
-      <Ionicons name={iconName} size={20} color={active ? '#102A43' : '#7A5A60'} />
-      <Text style={[styles.tabButtonText, active && styles.tabButtonTextActive]}>{label}</Text>
+    <View style={s.cookCard}>
+      {/* Full-bleed hero image */}
+      <View style={s.cookCardHero}>
+        <SmartImage uri={cook.chefImage} fallbackUri={FALLBACK_DISH_IMAGE} style={s.cookCardHeroImg} />
+        <View style={s.cookCardHeroOverlay} />
+        {/* Rating badge */}
+        <View style={s.ratingBadge}>
+          <Text style={s.ratingBadgeStar}>★</Text>
+          <Text style={s.ratingBadgeNum}>{cook.rating.toFixed(1)}</Text>
+        </View>
+        {/* Culture pill */}
+        <View style={s.culturePill}>
+          <Text style={s.culturePillText}>{cook.culture}</Text>
+        </View>
+        {/* Chef avatar */}
+        <View style={s.chefAvatar}>
+          <SmartImage uri={cook.profileImage} fallbackUri={FALLBACK_PROFILE_IMAGE} style={s.chefAvatarImg} />
+        </View>
+      </View>
+
+      {/* Card body */}
+      <View style={s.cookCardBody}>
+        <View style={s.cookCardRow}>
+          <View>
+            <Text style={s.cookName}>{cook.name}</Text>
+            <Text style={s.cookMeta}>📍 {cook.location} · {cook.priceRange}</Text>
+          </View>
+          <Text style={s.preorderBadge}>{cook.preOrderHours}h notice</Text>
+        </View>
+
+        <Text style={s.cookStory}>{cook.story}</Text>
+
+        {/* Tags */}
+        <View style={s.tagRow}>
+          {(cook.tags || []).map((tag) => (
+            <Text key={tag} style={s.tag}>{tag}</Text>
+          ))}
+          {cook.ecoFriendly && <Text style={s.ecoTag}>🌿 Eco</Text>}
+        </View>
+
+        {/* Divider */}
+        <View style={s.divider} />
+
+        {/* Dish list */}
+        <Text style={s.dishSectionLabel}>Popular dishes</Text>
+        {dishes.map((dish) => (
+          <Pressable key={dish.name} onPress={() => onRequest(cook, dish.name)} style={s.dishRow}>
+            <SmartImage uri={dish.image} fallbackUri={FALLBACK_DISH_IMAGE} style={s.dishThumb} />
+            <View style={s.dishInfo}>
+              <Text style={s.dishName}>{dish.name}</Text>
+              {!!dish.description && <Text style={s.dishDesc}>{dish.description}</Text>}
+            </View>
+            <View style={s.dishRight}>
+              <Text style={s.dishPrice}>{dish.price}</Text>
+              <View style={s.requestPill}>
+                <Text style={s.requestPillText}>Order</Text>
+              </View>
+            </View>
+          </Pressable>
+        ))}
+
+        {/* Profile button */}
+        <Pressable onPress={onProfile} style={s.profileBtn}>
+          <Text style={s.profileBtnText}>View full profile</Text>
+          <Ionicons name="arrow-forward" size={14} color={C.accent} />
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
+// ─── Chef Profile ─────────────────────────────────────────────────────────────
+function ChefProfile({ chef, onRequest }) {
+  const dishes = getCookDishes(chef);
+  return (
+    <View style={s.cookCard}>
+      <View style={[s.cookCardHero, { height: 260 }]}>
+        <SmartImage uri={chef.chefImage} fallbackUri={FALLBACK_DISH_IMAGE} style={s.cookCardHeroImg} />
+        <View style={s.cookCardHeroOverlay} />
+        <View style={s.ratingBadge}>
+          <Text style={s.ratingBadgeStar}>★</Text>
+          <Text style={s.ratingBadgeNum}>{chef.rating.toFixed(1)}</Text>
+        </View>
+        <View style={s.culturePill}><Text style={s.culturePillText}>{chef.culture}</Text></View>
+        <View style={s.chefAvatar}><SmartImage uri={chef.profileImage} fallbackUri={FALLBACK_PROFILE_IMAGE} style={s.chefAvatarImg} /></View>
+      </View>
+      <View style={s.cookCardBody}>
+        <Text style={s.cookName}>{chef.name}</Text>
+        <Text style={s.cookMeta}>📍 {chef.location} · {chef.priceRange} · {chef.preOrderHours}h notice</Text>
+        <Text style={[s.cookStory, { marginTop: 10 }]}>{chef.story}</Text>
+        <View style={s.divider} />
+        <Text style={s.dishSectionLabel}>Full menu</Text>
+        {dishes.map((dish) => (
+          <View key={dish.name} style={s.profileDishCard}>
+            <SmartImage uri={dish.image} fallbackUri={FALLBACK_DISH_IMAGE} style={s.profileDishImg} />
+            <View style={s.profileDishBody}>
+              <Text style={s.dishName}>{dish.name}</Text>
+              {!!dish.description && <Text style={s.dishDesc}>{dish.description}</Text>}
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                <Text style={s.dishPrice}>{dish.price}</Text>
+                <Pressable onPress={() => onRequest(chef, dish.name)} style={s.requestPill}>
+                  <Text style={s.requestPillText}>Request this</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+// ─── Filter Chips ─────────────────────────────────────────────────────────────
+function FilterChips({ options, active, onSelect }) {
+  return (
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 12, paddingHorizontal: 2 }}>
+      {options.map((opt) => (
+        <Pressable key={opt} onPress={() => onSelect(opt)} style={[s.chip, active === opt && s.chipActive]}>
+          <Text style={[s.chipText, active === opt && s.chipTextActive]}>{opt}</Text>
+        </Pressable>
+      ))}
+    </ScrollView>
+  );
+}
+
+// ─── Tab Button ───────────────────────────────────────────────────────────────
+function TabButton({ item, active, onPress }) {
+  return (
+    <Pressable onPress={onPress} style={[s.tabBtn, active && s.tabBtnActive]}>
+      <Ionicons name={active ? item.iconActive : item.icon} size={20} color={active ? C.accent : C.textMuted} />
+      <Text style={[s.tabBtnText, active && s.tabBtnTextActive]}>{item.label}</Text>
     </Pressable>
   );
 }
 
+// ─── SmartImage ───────────────────────────────────────────────────────────────
 function SmartImage({ uri, fallbackUri, style }) {
-  const [currentUri, setCurrentUri] = useState(uri || fallbackUri || '');
-
-  useEffect(() => {
-    setCurrentUri(uri || fallbackUri || '');
-  }, [uri, fallbackUri]);
-
-  const source = currentUri ? { uri: currentUri } : require('./assets/icon.png');
-
+  const [src, setSrc] = useState(uri || fallbackUri || '');
+  useEffect(() => { setSrc(uri || fallbackUri || ''); }, [uri, fallbackUri]);
   return (
     <Image
-      source={source}
+      source={src ? { uri: src } : require('./assets/icon.png')}
       style={style}
-      onError={() => {
-        if (fallbackUri && currentUri !== fallbackUri) {
-          setCurrentUri(fallbackUri);
-          return;
-        }
-        setCurrentUri('');
-      }}
+      onError={() => { if (fallbackUri && src !== fallbackUri) setSrc(fallbackUri); }}
     />
   );
 }
 
+// ─── FormField ────────────────────────────────────────────────────────────────
 function FormField({ label, value, onChangeText, placeholder, multiline, keyboardType }) {
   return (
-    <View style={styles.field}>
-      <Text style={styles.fieldLabel}>{label}</Text>
+    <View style={s.field}>
+      <Text style={s.fieldLabel}>{label}</Text>
       <TextInput
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor="#B6A89B"
+        placeholderTextColor={C.textMuted}
         multiline={multiline}
         keyboardType={keyboardType}
-        style={[styles.input, multiline && styles.inputMultiline]}
+        style={[s.input, multiline && s.inputMulti]}
       />
     </View>
   );
 }
 
+// ─── PrimaryButton ────────────────────────────────────────────────────────────
 function PrimaryButton({ label, onPress }) {
   return (
-    <Pressable onPress={onPress} style={styles.primaryButton}>
-      <Text style={styles.primaryButtonText}>{label}</Text>
+    <Pressable onPress={onPress} style={s.primaryBtn}>
+      <Text style={s.primaryBtnText}>{label}</Text>
     </Pressable>
   );
 }
 
-const serifFont = Platform.select({ ios: 'Georgia', android: 'serif', default: 'serif' });
+// ─── Styles ───────────────────────────────────────────────────────────────────
+const s = StyleSheet.create({
+  safeArea: { flex: 1, backgroundColor: C.bg },
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#FFF3E8',
-  },
+  // Header
   header: {
-    paddingHorizontal: 22,
-    paddingTop: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 10,
     paddingBottom: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#F4D5C5',
-    backgroundColor: '#FFF8F2',
+    borderBottomColor: C.cardBorder,
+    backgroundColor: C.surface,
   },
-  title: {
-    fontSize: 30,
-    fontFamily: serifFont,
-    color: '#251C44',
-    letterSpacing: 1,
+  headerTitle: { fontFamily: serifFont, fontSize: 26, color: C.cream, letterSpacing: 0.5 },
+  headerSub: { fontSize: 11, color: C.textSecondary, marginTop: 2, letterSpacing: 0.5 },
+  headerDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: C.accent },
+
+  screenContent: { flex: 1 },
+  scroll: { paddingBottom: 32 },
+
+  // Hero banner
+  heroBanner: { height: 260, position: 'relative', marginBottom: 0 },
+  heroBannerImage: { width: '100%', height: '100%' },
+  heroBannerOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(8,4,2,0.62)',
   },
-  subtitle: {
-    fontSize: 13,
-    color: '#9E5A4B',
-    marginTop: 4,
-  },
-  screenContent: {
-    flex: 1,
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    backgroundColor: '#FFF8F2',
-    borderTopWidth: 1,
-    borderTopColor: '#F4D5C5',
-  },
-  tabButton: {
-    flex: 1,
-    marginHorizontal: 4,
-    paddingVertical: 8,
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-  },
-  tabButtonActive: {
-    backgroundColor: '#FE596044',
-  },
-  tabButtonText: {
-    color: '#8B4A46',
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  tabButtonTextActive: {
-    color: '#251C44',
-  },
-  content: {
-    padding: 20,
-    paddingBottom: 0,
-  },
-  decorWrap: {
+  heroBannerContent: {
     position: 'absolute',
-    top: -40,
+    bottom: 0,
     left: 0,
     right: 0,
-    height: 220,
-    zIndex: -1,
+    padding: 20,
+    paddingBottom: 24,
   },
-  decorBlobPrimary: {
-    position: 'absolute',
-    right: -35,
-    top: 0,
-    width: 170,
-    height: 170,
-    borderRadius: 85,
-    backgroundColor: '#FE5960',
-    opacity: 0.22,
-  },
-  decorBlobSecondary: {
-    position: 'absolute',
-    left: -50,
-    top: 26,
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    backgroundColor: '#D4553D',
-    opacity: 0.28,
-  },
-  decorBlobTertiary: {
-    position: 'absolute',
-    left: 110,
-    top: -12,
-    width: 110,
-    height: 110,
-    borderRadius: 55,
-    backgroundColor: '#B13019',
-    opacity: 0.14,
-  },
-  section: {
-    marginBottom: 24,
-  },
-  checkoutHeader: {
-    backgroundColor: '#FFF9F4',
-    borderRadius: 20,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: '#F0CDBD',
-    marginBottom: 22,
-    shadowColor: '#3A2613',
-    shadowOpacity: 0.09,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 3,
-  },
-  checkoutEyebrow: {
-    textTransform: 'uppercase',
-    letterSpacing: 1.1,
-    fontSize: 11,
-    color: '#b13019',
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  checkoutStatsRow: {
-    flexDirection: 'row',
-    gap: 12,
-    marginTop: 10,
-  },
-  checkoutStat: {
-    flex: 1,
-    backgroundColor: '#FFE8DC',
-    borderRadius: 12,
-    padding: 12,
-  },
-  checkoutStatNumber: {
-    fontSize: 20,
-    color: '#B13019',
-    fontWeight: '700',
-  },
-  checkoutStatLabel: {
-    color: '#9B5B4E',
-    fontSize: 12,
-    marginTop: 2,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontFamily: serifFont,
-    color: '#251C44',
-  },
-  sectionCopy: {
-    color: '#9E5A4B',
-    marginTop: 8,
-    marginBottom: 12,
-  },
-  filterBarRow: {
-    paddingVertical: 6,
-    paddingRight: 10,
-  },
-  filterBarButton: {
-    backgroundColor: '#FFF3EC',
-    borderWidth: 1,
-    borderColor: '#F2CCBA',
-    borderRadius: 18,
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    marginRight: 10,
-    shadowColor: '#3A2613',
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 3 },
-  },
-  filterBarButtonActive: {
-    backgroundColor: '#b13019',
-    borderColor: '#b13019',
-  },
-  filterBarInner: {
+  heroBannerEye: { color: C.accent, fontSize: 10, fontWeight: '700', letterSpacing: 2.5, marginBottom: 6 },
+  heroBannerTitle: { fontFamily: serifFont, fontSize: 30, color: C.cream, lineHeight: 36, marginBottom: 16 },
+  heroBannerStats: { flexDirection: 'row', alignItems: 'center' },
+  heroBannerStat: { alignItems: 'center' },
+  heroBannerStatNum: { color: C.gold, fontSize: 18, fontWeight: '700' },
+  heroBannerStatLbl: { color: C.creamDim, fontSize: 10, letterSpacing: 0.5, marginTop: 2 },
+  heroBannerStatDivider: { width: 1, height: 28, backgroundColor: C.cardBorder, marginHorizontal: 16 },
+
+  // Filters
+  filterSection: { backgroundColor: C.surface, paddingTop: 14, paddingHorizontal: 16, borderBottomWidth: 1, borderBottomColor: C.cardBorder },
+  filterBarRow: { paddingBottom: 2 },
+  filterBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
-  filterBarLabelSingle: {
-    color: '#251C44',
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  filterBarLabelSingleActive: {
-    color: '#FFFDF8',
-  },
-  chipRow: {
-    paddingVertical: 12,
-    paddingHorizontal: 2,
-  },
-  chip: {
+    backgroundColor: C.card,
+    borderWidth: 1,
+    borderColor: C.cardBorder,
+    borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 14,
-    backgroundColor: '#FFE3D8',
+    marginRight: 8,
+  },
+  filterBtnActive: { backgroundColor: C.accent, borderColor: C.accent },
+  filterBtnText: { color: C.creamDim, fontSize: 13, fontWeight: '500' },
+  filterBtnTextActive: { color: C.bg },
+  chip: { backgroundColor: C.card, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 16, marginRight: 8, borderWidth: 1, borderColor: C.cardBorder },
+  chipActive: { backgroundColor: C.accent, borderColor: C.accent },
+  chipText: { color: C.textSecondary, fontSize: 13 },
+  chipTextActive: { color: C.bg, fontWeight: '600' },
+  moreRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingVertical: 12 },
+  smallChip: { backgroundColor: C.card, borderRadius: 16, paddingVertical: 6, paddingHorizontal: 12, borderWidth: 1, borderColor: C.cardBorder },
+  smallChipActive: { backgroundColor: C.accent, borderColor: C.accent },
+  smallChipText: { color: C.textSecondary, fontSize: 12 },
+  smallChipTextActive: { color: C.bg, fontWeight: '600' },
+
+  // Cards section
+  cardsSection: { padding: 16 },
+  sectionHeading: { fontFamily: serifFont, fontSize: 20, color: C.cream, marginBottom: 14 },
+
+  // Cook card
+  cookCard: {
+    backgroundColor: C.card,
     borderRadius: 20,
-    marginRight: 10,
-  },
-  chipActive: {
-    backgroundColor: '#d4553dff',
-  },
-  chipText: {
-    color: '#8B4A46',
-    fontSize: 13,
-  },
-  chipTextActive: {
-    color: '#FFFDFC',
-    fontWeight: '600',
-  },
-  moreFilterRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-    marginTop: 12,
-  },
-  smallChip: {
-    paddingVertical: 7,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    backgroundColor: '#FFE3D8',
-  },
-  smallChipActive: {
-    backgroundColor: '#b13019',
-  },
-  smallChipText: {
-    color: '#8B4A46',
-    fontSize: 12,
-  },
-  smallChipTextActive: {
-    color: '#FFFDFC',
-    fontWeight: '600',
-  },
-  card: {
-    backgroundColor: '#FFFBF7',
-    borderRadius: 20,
-    padding: 14,
-    marginBottom: 18,
+    marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#F0D7CB',
-    shadowColor: '#3A2613',
-    shadowOpacity: 0.12,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 5,
+    borderColor: C.cardBorder,
     overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 8,
   },
-  cardHeroImage: {
-    width: '100%',
-    height: 176,
-    borderRadius: 14,
-    marginBottom: 0,
-  },
-  heroImageWrap: {
-    position: 'relative',
-    marginBottom: 12,
-  },
-  heroOverlay: {
+  cookCardHero: { height: 200, position: 'relative' },
+  cookCardHeroImg: { width: '100%', height: '100%' },
+  cookCardHeroOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(36, 16, 14, 0.22)',
-    borderRadius: 14,
+    backgroundColor: 'rgba(10,5,2,0.4)',
   },
-  heroBadge: {
+  ratingBadge: {
     position: 'absolute',
-    left: 10,
-    bottom: 10,
+    top: 12,
+    right: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(10,5,2,0.75)',
+    borderRadius: 20,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 20,
-    backgroundColor: '#FE5960EE',
+    borderWidth: 1,
+    borderColor: C.gold,
   },
-  heroBadgeText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    textTransform: 'uppercase',
-    letterSpacing: 0.7,
-  },
-  profileBubble: {
+  ratingBadgeStar: { color: C.gold, fontSize: 12, marginRight: 3 },
+  ratingBadgeNum: { color: C.gold, fontWeight: '700', fontSize: 13 },
+  culturePill: {
     position: 'absolute',
-    right: 12,
-    bottom: 10,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    borderWidth: 2,
-    borderColor: '#FFFDF8',
-    overflow: 'hidden',
-    shadowColor: '#3A2613',
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 3,
-  },
-  profileBubbleImage: {
-    width: '100%',
-    height: '100%',
-  },
-  profileBubbleLarge: {
-    position: 'absolute',
-    right: 14,
-    bottom: 12,
-    width: 78,
-    height: 78,
-    borderRadius: 39,
-    borderWidth: 3,
-    borderColor: '#FFFDFC',
-    overflow: 'hidden',
-  },
-  profileBubbleLargeImage: {
-    width: '100%',
-    height: '100%',
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontFamily: serifFont,
-    color: '#251C44',
-  },
-  cardMeta: {
-    color: '#9E5A4B',
-    fontSize: 12,
-    marginTop: 2,
-  },
-  ratingPill: {
-    backgroundColor: '#251C44',
-    borderRadius: 12,
+    top: 12,
+    left: 12,
+    backgroundColor: C.accent,
+    borderRadius: 16,
     paddingHorizontal: 10,
     paddingVertical: 4,
   },
-  ratingText: {
-    color: '#FFFDF8',
-    fontWeight: '600',
-  },
-  cardStory: {
-    color: '#8A5D55',
-    marginTop: 12,
-    lineHeight: 20,
-  },
-  tagRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 10,
-  },
-  tag: {
-    backgroundColor: '#FFE7DD',
-    color: '#8A4B44',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 14,
-    fontSize: 11,
-    marginRight: 8,
-    marginBottom: 6,
-  },
-  dishLabel: {
-    marginTop: 10,
-    color: '#9B5B4E',
-    fontSize: 12,
-  },
-  dishRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F4E3D4',
-  },
-  dishIdentity: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-    marginRight: 10,
-  },
-  dishThumb: {
+  culturePillText: { color: C.bg, fontSize: 11, fontWeight: '700', letterSpacing: 0.5 },
+  chefAvatar: {
+    position: 'absolute',
+    bottom: -20,
+    right: 16,
     width: 52,
     height: 52,
-    borderRadius: 12,
-    marginRight: 10,
-  },
-  dishMeta: {
-    alignItems: 'flex-end',
-    gap: 4,
-  },
-  dishPrice: {
-    color: '#8A4B44',
-    fontWeight: '600',
-  },
-  dishName: {
-    color: '#251C44',
-    fontWeight: '600',
-  },
-  dishDescription: {
-    color: '#9E5A4B',
-    fontSize: 12,
-    marginTop: 2,
-    maxWidth: 180,
-  },
-  dishAction: {
-    color: '#fe5960ff',
-    fontWeight: '600',
-    fontSize: 12,
-  },
-  cardFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 12,
-  },
-  preorder: {
-    color: '#9E5A4B',
-    fontSize: 12,
-  },
-  price: {
-    color: '#251C44',
-    fontWeight: '600',
-  },
-  profileButton: {
-    marginTop: 12,
-    backgroundColor: '#b13019',
-    paddingVertical: 11,
-    borderRadius: 14,
-    alignItems: 'center',
-  },
-  profileButtonText: {
-    color: '#FFFDFC',
-    fontWeight: '600',
-    fontSize: 13,
-  },
-  backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    marginBottom: 12,
-  },
-  backButtonText: {
-    color: '#152033',
-    fontWeight: '600',
-    marginLeft: 4,
-  },
-  profileCard: {
-    backgroundColor: '#FFFBF7',
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#F0D7CB',
-    padding: 14,
+    borderRadius: 26,
+    borderWidth: 2,
+    borderColor: C.accent,
     overflow: 'hidden',
+    backgroundColor: C.card,
   },
-  profileHeroImage: {
-    width: '100%',
-    height: 224,
-    borderRadius: 14,
-    marginBottom: 0,
-  },
-  profileSectionTitle: {
-    color: '#251C44',
-    fontFamily: serifFont,
-    fontSize: 18,
-    marginTop: 14,
-    marginBottom: 10,
-  },
-  profileDishCard: {
-    borderWidth: 1,
-    borderColor: '#F0D7CB',
-    borderRadius: 14,
-    marginBottom: 12,
-    overflow: 'hidden',
-    backgroundColor: '#FFFFFF',
-  },
-  profileDishImage: {
-    width: '100%',
-    height: 160,
-  },
-  profileDishContent: {
-    padding: 12,
-  },
-  profileDishFooter: {
-    marginTop: 8,
+  chefAvatarImg: { width: '100%', height: '100%' },
+  cookCardBody: { padding: 16, paddingTop: 24 },
+  cookCardRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 },
+  cookName: { fontFamily: serifFont, fontSize: 20, color: C.cream },
+  cookMeta: { color: C.textSecondary, fontSize: 12, marginTop: 3 },
+  preorderBadge: { color: C.gold, fontSize: 11, fontWeight: '600', backgroundColor: 'rgba(212,168,83,0.12)', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 10 },
+  cookStory: { color: C.textSecondary, fontSize: 13, lineHeight: 19 },
+  tagRow: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 10, gap: 6 },
+  tag: { backgroundColor: 'rgba(232,99,58,0.12)', color: C.accent, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10, fontSize: 11, borderWidth: 1, borderColor: 'rgba(232,99,58,0.2)' },
+  ecoTag: { backgroundColor: 'rgba(80,180,80,0.12)', color: '#6CC86C', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10, fontSize: 11, borderWidth: 1, borderColor: 'rgba(80,180,80,0.2)' },
+  divider: { height: 1, backgroundColor: C.cardBorder, marginVertical: 14 },
+  dishSectionLabel: { color: C.textMuted, fontSize: 10, fontWeight: '700', letterSpacing: 1.5, marginBottom: 10, textTransform: 'uppercase' },
+
+  // Dish rows
+  dishRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
+  dishThumb: { width: 56, height: 56, borderRadius: 12, marginRight: 12, backgroundColor: C.surface },
+  dishInfo: { flex: 1, marginRight: 8 },
+  dishName: { color: C.cream, fontWeight: '600', fontSize: 14 },
+  dishDesc: { color: C.textSecondary, fontSize: 12, marginTop: 2, lineHeight: 17 },
+  dishRight: { alignItems: 'flex-end', gap: 6 },
+  dishPrice: { color: C.gold, fontWeight: '700', fontSize: 14 },
+  requestPill: { backgroundColor: C.accent, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 4 },
+  requestPillText: { color: C.bg, fontWeight: '700', fontSize: 11 },
+
+  // Profile button
+  profileBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: 8, paddingVertical: 12, borderRadius: 12, borderWidth: 1, borderColor: C.accent },
+  profileBtnText: { color: C.accent, fontWeight: '600', fontSize: 14 },
+
+  // Chef profile dish cards
+  profileDishCard: { borderRadius: 14, overflow: 'hidden', marginBottom: 14, borderWidth: 1, borderColor: C.cardBorder, backgroundColor: C.surface },
+  profileDishImg: { width: '100%', height: 150 },
+  profileDishBody: { padding: 12 },
+
+  // Back button
+  backBtn: { flexDirection: 'row', alignItems: 'center', marginBottom: 14 },
+  backBtnText: { color: C.accent, fontWeight: '600', marginLeft: 4 },
+
+  // Empty state
+  emptyCard: { backgroundColor: C.card, borderRadius: 16, padding: 20, borderWidth: 1, borderColor: C.cardBorder, alignItems: 'center' },
+  emptyTitle: { color: C.cream, fontSize: 16, fontWeight: '600', marginBottom: 6 },
+  emptySub: { color: C.textSecondary, fontSize: 13 },
+
+  // Sign up
+  signupHero: { marginBottom: 20 },
+  signupHeroEye: { color: C.accent, fontSize: 10, fontWeight: '700', letterSpacing: 2, marginBottom: 6 },
+  signupHeroTitle: { fontFamily: serifFont, fontSize: 28, color: C.cream, lineHeight: 34, marginBottom: 8 },
+  signupHeroCopy: { color: C.textSecondary, fontSize: 14, lineHeight: 20 },
+  formCard: { backgroundColor: C.card, borderRadius: 20, padding: 20, borderWidth: 1, borderColor: C.cardBorder },
+
+  // Form fields
+  field: { marginBottom: 14 },
+  fieldLabel: { color: C.textMuted, fontSize: 10, fontWeight: '700', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 6 },
+  input: { backgroundColor: C.surface, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, borderWidth: 1, borderColor: C.cardBorder, color: C.cream, fontSize: 14 },
+  inputMulti: { minHeight: 90, textAlignVertical: 'top' },
+  primaryBtn: { backgroundColor: C.accent, paddingVertical: 14, borderRadius: 14, alignItems: 'center', marginTop: 6 },
+  primaryBtnText: { color: C.bg, fontWeight: '700', fontSize: 15 },
+
+  // Bottom nav
+  bottomNav: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  field: {
-    marginBottom: 12,
-  },
-  fieldLabel: {
-    color: '#9B5B4E',
-    marginBottom: 6,
-    fontSize: 12,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  input: {
-    backgroundColor: '#FFF9F4',
-    borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    borderWidth: 1,
-    borderColor: '#F0D7CB',
-    color: '#251C44',
+    backgroundColor: C.navBg,
+    borderTopWidth: 1,
+    borderTopColor: C.cardBorder,
   },
-  inputMultiline: {
-    minHeight: 90,
-    textAlignVertical: 'top',
-  },
-  primaryButton: {
-    backgroundColor: '#d4553dff',
-    paddingVertical: 12,
-    borderRadius: 14,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  primaryButtonText: {
-    color: '#FFFDFC',
-    fontWeight: '600',
-  },
-  subhead: {
-    fontSize: 16,
-    marginTop: 16,
-    color: '#251C44',
-    fontFamily: serifFont,
-  },
-  adminCard: {
-    backgroundColor: '#FFF9F4',
-    borderRadius: 16,
-    padding: 14,
-    marginTop: 10,
-    borderWidth: 1,
-    borderColor: '#F0D7CB',
-  },
-  adminName: {
-    fontSize: 16,
-    color: '#251C44',
-  },
-  adminMeta: {
-    color: '#9E5A4B',
-    marginTop: 4,
-  },
-  adminStory: {
-    color: '#9E5A4B',
-    marginTop: 6,
-  },
-  emptyText: {
-    color: '#A07980',
-    marginTop: 8,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(24, 18, 12, 0.45)',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  modalCard: {
-    backgroundColor: '#FFF9F4',
-    borderRadius: 20,
-    padding: 20,
-    maxHeight: '90%',
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontFamily: serifFont,
-    color: '#251C44',
-  },
-  modalSubtitle: {
-    color: '#9E5A4B',
-    marginTop: 4,
-  },
-  modalLabel: {
-    marginTop: 12,
-    color: '#9B5B4E',
-    fontSize: 12,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  dishPicker: {
-    paddingVertical: 10,
-  },
-  dishChip: {
-    backgroundColor: '#FFE7DD',
-    borderRadius: 18,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    marginRight: 8,
-  },
-  dishChipActive: {
-    backgroundColor: '#b13019',
-  },
-  dishChipText: {
-    color: '#8B4A46',
-    fontSize: 12,
-  },
-  dishChipTextActive: {
-    color: '#FFFDF8',
-  },
-  modalActions: {
-    flexDirection: 'row',
-    gap: 10,
-    marginTop: 10,
-  },
-  modalPrimaryButton: {
-    flex: 1,
-    backgroundColor: '#b13019',
-    borderRadius: 14,
-    paddingVertical: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  modalSecondaryButton: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#d4553dff',
-    borderRadius: 14,
-    paddingVertical: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFF9F4',
-  },
-  secondaryButton: {
-    borderWidth: 1,
-    borderColor: '#d4553dff',
-    borderRadius: 14,
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-  },
-  secondaryButtonText: {
-    color: '#d4553dff',
-    fontWeight: '600',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  rowItem: {
-    flex: 1,
-  },
-  assistantContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingBottom: 0,
-    paddingTop: 14,
-  },
-  assistantMessages: {
-    paddingBottom: 12,
-  },
-  chatBubble: {
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 10,
-    maxWidth: '88%',
-  },
-  chatBubbleAssistant: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#FFF9F4',
-    borderWidth: 1,
-    borderColor: '#F0D7CB',
-  },
-  chatBubbleUser: {
-    alignSelf: 'flex-end',
-    backgroundColor: '#152033',
-  },
-  chatText: {
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  chatTextAssistant: {
-    color: '#251C44',
-  },
-  chatTextUser: {
-    color: '#FFFDFC',
-  },
-  chatInputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginTop: 'auto',
-  },
-  chatInput: {
-    flex: 1,
-    backgroundColor: '#FFF9F4',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#F0D7CB',
-    color: '#251C44',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-  },
-  chatSendButton: {
-    backgroundColor: '#b13019',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-  },
-  chatSendButtonDisabled: {
-    opacity: 0.6,
-  },
-  chatSendText: {
-    color: '#FFFDF8',
-    fontWeight: '600',
-  },
-  emptyStateCard: {
-    backgroundColor: '#FFF9F4',
-    borderWidth: 1,
-    borderColor: '#F0D7CB',
-    borderStyle: 'dashed',
-    borderRadius: 16,
-    padding: 16,
-    marginTop: 12,
-    marginBottom: 14,
-  },
-  emptyStateTitle: {
-    color: '#251C44',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  emptyStateCopy: {
-    color: '#9E5A4B',
-    marginTop: 6,
-    lineHeight: 20,
-  },
+  tabBtn: { flex: 1, alignItems: 'center', paddingVertical: 8, borderRadius: 12, gap: 3 },
+  tabBtnActive: { backgroundColor: 'rgba(232,99,58,0.12)' },
+  tabBtnText: { color: C.textMuted, fontSize: 10, fontWeight: '600' },
+  tabBtnTextActive: { color: C.accent },
+
+  // Assistant
+  assistantWrap: { flex: 1, paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
+  assistantMessages: { paddingBottom: 16 },
+  bubble: { maxWidth: '82%', borderRadius: 16, padding: 12, marginBottom: 10 },
+  bubbleAssistant: { alignSelf: 'flex-start', backgroundColor: C.card, borderWidth: 1, borderColor: C.cardBorder },
+  bubbleUser: { alignSelf: 'flex-end', backgroundColor: C.accent },
+  bubbleLabel: { color: C.accent, fontSize: 9, fontWeight: '700', letterSpacing: 1, marginBottom: 4 },
+  bubbleText: { fontSize: 14, lineHeight: 20 },
+  bubbleTextAssistant: { color: C.cream },
+  bubbleTextUser: { color: C.bg },
+  chatInputRow: { flexDirection: 'row', gap: 10, alignItems: 'center', paddingVertical: 8 },
+  chatInput: { flex: 1, backgroundColor: C.card, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12, borderWidth: 1, borderColor: C.cardBorder, color: C.cream, fontSize: 14 },
+  sendBtn: { backgroundColor: C.accent, width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
+
+  // Modal
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'flex-end' },
+  modalCard: { backgroundColor: C.surface, borderTopLeftRadius: 28, borderTopRightRadius: 28, padding: 24, maxHeight: '88%', borderTopWidth: 1, borderColor: C.cardBorder },
+  modalHandle: { width: 36, height: 4, backgroundColor: C.cardBorder, borderRadius: 2, alignSelf: 'center', marginBottom: 18 },
+  modalTitle: { fontFamily: serifFont, fontSize: 22, color: C.cream },
+  modalSub: { color: C.textSecondary, marginTop: 4, marginBottom: 8, fontSize: 13 },
+  modalLabel: { color: C.textMuted, fontSize: 10, fontWeight: '700', letterSpacing: 1.5, marginTop: 8 },
+  dishChip: { backgroundColor: C.card, borderRadius: 16, paddingHorizontal: 14, paddingVertical: 7, marginRight: 8, borderWidth: 1, borderColor: C.cardBorder },
+  dishChipActive: { backgroundColor: C.accent, borderColor: C.accent },
+  dishChipText: { color: C.textSecondary, fontSize: 13 },
+  dishChipTextActive: { color: C.bg, fontWeight: '600' },
+  modalActions: { flexDirection: 'row', gap: 12, marginTop: 16 },
+  modalCancel: { flex: 1, paddingVertical: 14, borderRadius: 14, alignItems: 'center', borderWidth: 1, borderColor: C.cardBorder },
+  modalCancelText: { color: C.textSecondary, fontWeight: '600' },
+  modalConfirm: { flex: 1, paddingVertical: 14, borderRadius: 14, alignItems: 'center', backgroundColor: C.accent },
+  modalConfirmText: { color: C.bg, fontWeight: '700' },
 });
